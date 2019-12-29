@@ -1,0 +1,4 @@
+bin/
+obj/
+/packages/
+mono_crash.*

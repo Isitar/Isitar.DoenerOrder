@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="$APPLICATION_CONFIG_DIR$/consoles/db" t="IncludeRecursive" />
+    <e p="$APPLICATION_CONFIG_DIR$/extensions" t="IncludeRecursive" />
+    <e p="$USER_HOME$/.Rider2019.3/system/extResources" t="IncludeRecursive" />
+    <e p="$USER_HOME$/.Rider2019.3/system/resharper-host/local/Transient/ReSharperHost/v193/SolutionCaches/_Isitar.DoenerOrder.494294530.00" t="ExcludeRecursive" />
+    <e p="$USER_HOME$/.nuget/packages/microsoft.net.test.sdk/16.2.0/build/netcoreapp1.0" t="Include">
+      <e p="Microsoft.NET.Test.Sdk.Program.cs" t="Include" />
+    </e>
+    <e p="$USER_HOME$/.nuget/packages/xunit.runner.visualstudio/2.4.0/build/netcoreapp1.0/xunit.runner.reporters.netcoreapp10.dll" t="Include" />
+    <e p="$USER_HOME$/.nuget/packages/xunit.runner.visualstudio/2.4.0/build/netcoreapp1.0/xunit.runner.utility.netcoreapp10.dll" t="Include" />
+    <e p="$USER_HOME$/.nuget/packages/xunit.runner.visualstudio/2.4.0/build/netcoreapp1.0/xunit.runner.visualstudio.dotnetcore.testadapter.dll" t="Include" />
+    <e p="$PROJECT_DIR$" t="IncludeFlat">
+      <e p="Isitar.DoenerOrder" t="IncludeRecursive">
+        <e p="Contracts" t="Include">
+          <e p="Requests" t="Include">
+            <e p="LoginViewModel.cs" t="Include" />
+            <e p="RegistrationViewModel.cs" t="Include" />
+            <e p="SupplierDTO.cs" t="Include" />
+          </e>
+          <e p="Responses" t="Include">
+            <e p="AuthFailedResponse.cs" t="Include" />
+            <e p="AuthSuccessResponse.cs" t="Include" />
+          </e>
+          <e p="V1" t="Include">
+            <e p="ApiRoutes.cs" t="Include" />
+          </e>
+        </e>
+        <e p="Controllers" t="Include">
+          <e p="V1" t="Include">
+            <e p="ApiController.cs" t="Include" />
+            <e p="AuthController.cs" t="Include" />
+            <e p="SupplierController.cs" t="Include" />
+            <e p="UserController.cs" t="Include" />
+          </e>
+        </e>
+        <e p="Data" t="Include">
+          <e p="DoenerOrderContext.cs" t="Include" />
+          <e p="EntityConfigurations" t="Include">
+            <e p="BulkOrderEntityConfiguration.cs" t="Include" />
+            <e p="IngredientEntityConfiguration.cs" t="Include" />
+            <e p="OrderEntityConfiguration.cs" t="Include" />
+            <e p="OrderLineEntityConfiguration.cs" t="Include" />
+            <e p="ProductEntityConfiguration.cs" t="Include" />
+            <e p="ProductIngredientEntityConfiguration.cs" t="Include" />
+            <e p="SupplierEntityConfiguration.cs" t="Include" />
+          </e>
+          <e p="Migrations" t="Include">
+            <e p="20191224112237_InitialMigration.Designer.cs" t="Include" />
+            <e p="20191224112237_InitialMigration.cs" t="Include" />
+            <e p="DoenerOrderContextModelSnapshot.cs" t="Include" />
+          </e>
+        </e>
+        <e p="Dockerfile" t="Include" />
+        <e p="Domain" t="Include">
+          <e p="DAO" t="Include">
+            <e p="BulkOrder.cs" t="Include" />
+            <e p="Ingredient.cs" t="Include" />
+            <e p="Order.cs" t="Include" />
+            <e p="OrderLine.cs" t="Include" />
+            <e p="Product.cs" t="Include" />
+            <e p="ProductIngredient.cs" t="Include" />
+            <e p="Role.cs" t="Include" />
+            <e p="Supplier.cs" t="Include" />
+            <e p="User.cs" t="Include" />
+          </e>
+          <e p="Responses" t="Include">
+            <e p="AuthResponse.cs" t="Include" />
+          </e>
+        </e>
+        <e p="Helpers" t="Include">
+          <e p="Auth" t="Include">
+            <e p="ClaimPermissions.cs" t="Include" />
+            <e p="CustomClaimTypes.cs" t="Include" />
+          </e>
+        </e>
+        <e p="Infrastructure" t="Include">
+          <e p="IdentitySetup.cs" t="Include" />
+          <e p="JwtSetup.cs" t="Include" />
+          <e p="ServiceSetup.cs" t="Include" />
+          <e p="SwaggerSetup.cs" t="Include" />
+        </e>
+        <e p="Isitar.DoenerOrder.csproj" t="IncludeRecursive" />
+        <e p="Options" t="Include">
+          <e p="JwtSettings.cs" t="Include" />
+        </e>
+        <e p="Program.cs" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="launchSettings.json" t="Include" />
+        </e>
+        <e p="Services" t="Include">
+          <e p="BusinessLayer.cs" t="Include" />
+          <e p="IIdentityService.cs" t="Include" />
+          <e p="IdentityService.cs" t="Include" />
+          <e p="SupplierService.cs" t="Include" />
+        </e>
+        <e p="Startup.cs" t="Include" />
+        <e p="WeatherForecast.cs" t="Include" />
+        <e p="appsettings.Development.json" t="Include" />
+        <e p="appsettings.json" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="mono_crash.mem.27591.1.blob" t="Include" />
+        <e p="mono_crash.mem.36608.1.blob" t="Include" />
+        <e p="mono_crash.mem.51747.1.blob" t="Include" />
+        <e p="mono_crash.mem.55226.1.blob" t="Include" />
+        <e p="mono_crash.mem.70851.1.blob" t="Include" />
+        <e p="mono_crash.mem.72810.1.blob" t="Include" />
+        <e p="mono_crash.mem.74146.1.blob" t="Include" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp3.1" t="Include">
+              <e p="Isitar.DoenerOrder.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="Isitar.DoenerOrder.Tests" t="IncludeRecursive">
+        <e p="Isitar.DoenerOrder.Tests.csproj" t="IncludeRecursive" />
+        <e p="SupplierTests.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp3.1" t="Include">
+              <e p="Isitar.DoenerOrder.Tests.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="Isitar.DoenerOrder.sln" t="IncludeFlat" />
+      <e p="packages" t="ExcludeRecursive" />
+    </e>
+  </component>
+</project>
