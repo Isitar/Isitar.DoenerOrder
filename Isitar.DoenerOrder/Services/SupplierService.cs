@@ -11,10 +11,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Isitar.DoenerOrder.Services
 {
-    public class SupplierService : Services.BusinessLayer
+    public class SupplierService
     {
-        public SupplierService(DoenerOrderContext dbContext) : base(dbContext)
+        private readonly DoenerOrderContext dbContext;
+
+        public SupplierService(DoenerOrderContext dbContext)
         {
+            this.dbContext = dbContext;
         }
 
         public async Task<SupplierDTO> GetAsync(int id)

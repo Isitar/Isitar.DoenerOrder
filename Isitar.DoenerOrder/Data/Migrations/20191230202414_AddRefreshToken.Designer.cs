@@ -3,15 +3,17 @@ using System;
 using Isitar.DoenerOrder.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Isitar.DoenerOrder.Data.Migrations
 {
     [DbContext(typeof(DoenerOrderContext))]
-    partial class DoenerOrderContextModelSnapshot : ModelSnapshot
+    [Migration("20191230202414_AddRefreshToken")]
+    partial class AddRefreshToken
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -167,9 +169,6 @@ namespace Isitar.DoenerOrder.Data.Migrations
                     b.Property<DateTime>("Expires")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<bool>("Invalidated")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("JwtTokenId")
                         .IsRequired()
                         .HasColumnType("text");
@@ -181,12 +180,7 @@ namespace Isitar.DoenerOrder.Data.Migrations
                     b.Property<bool>("Used")
                         .HasColumnType("boolean");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("RefreshTokens");
                 });
@@ -483,15 +477,6 @@ namespace Isitar.DoenerOrder.Data.Migrations
                     b.HasOne("Isitar.DoenerOrder.Domain.DAO.Product", "Product")
                         .WithMany("ProductIngredients")
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Isitar.DoenerOrder.Domain.DAO.RefreshToken", b =>
-                {
-                    b.HasOne("Isitar.DoenerOrder.Domain.DAO.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

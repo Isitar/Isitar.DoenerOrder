@@ -16,6 +16,7 @@
         <e p="Contracts" t="Include">
           <e p="Requests" t="Include">
             <e p="LoginViewModel.cs" t="Include" />
+            <e p="RefreshTokenViewModel.cs" t="Include" />
             <e p="RegistrationViewModel.cs" t="Include" />
             <e p="SupplierDTO.cs" t="Include" />
           </e>
@@ -44,11 +45,16 @@
             <e p="OrderLineEntityConfiguration.cs" t="Include" />
             <e p="ProductEntityConfiguration.cs" t="Include" />
             <e p="ProductIngredientEntityConfiguration.cs" t="Include" />
+            <e p="RefreshTokenEntityConfiguration.cs" t="Include" />
             <e p="SupplierEntityConfiguration.cs" t="Include" />
           </e>
           <e p="Migrations" t="Include">
             <e p="20191224112237_InitialMigration.Designer.cs" t="Include" />
             <e p="20191224112237_InitialMigration.cs" t="Include" />
+            <e p="20191230202414_AddRefreshToken.Designer.cs" t="Include" />
+            <e p="20191230202414_AddRefreshToken.cs" t="Include" />
+            <e p="20191230203333_AddFieldsToRefreshToken.Designer.cs" t="Include" />
+            <e p="20191230203333_AddFieldsToRefreshToken.cs" t="Include" />
             <e p="DoenerOrderContextModelSnapshot.cs" t="Include" />
           </e>
         </e>
@@ -61,6 +67,7 @@
             <e p="OrderLine.cs" t="Include" />
             <e p="Product.cs" t="Include" />
             <e p="ProductIngredient.cs" t="Include" />
+            <e p="RefreshToken.cs" t="Include" />
             <e p="Role.cs" t="Include" />
             <e p="Supplier.cs" t="Include" />
             <e p="User.cs" t="Include" />
@@ -90,7 +97,6 @@
           <e p="launchSettings.json" t="Include" />
         </e>
         <e p="Services" t="Include">
-          <e p="BusinessLayer.cs" t="Include" />
           <e p="IIdentityService.cs" t="Include" />
           <e p="IdentityService.cs" t="Include" />
           <e p="SupplierService.cs" t="Include" />
@@ -100,6 +106,8 @@
         <e p="appsettings.Development.json" t="Include" />
         <e p="appsettings.json" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
+        <e p="mono_crash.mem.10631.1.blob" t="Include" />
+        <e p="mono_crash.mem.12522.1.blob" t="Include" />
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
             <e p="netcoreapp3.1" t="Include">

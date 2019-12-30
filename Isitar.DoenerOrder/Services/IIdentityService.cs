@@ -6,7 +6,8 @@ namespace Isitar.DoenerOrder.Services
 {
     public interface IIdentityService
     {
-        Task<AuthResponse> LoginAsync(LoginViewModel loginViewModel);
-        Task<bool> RegisterAsync(RegistrationViewModel registrationViewModel);
+        Task<AuthResponse> LoginAsync(string username, string password);
+        Task<bool> RegisterAsync(string username, string email, string password);
+        Task<AuthResponse> RefreshAsync(string refreshToken, string jwtToken);
     }
 }

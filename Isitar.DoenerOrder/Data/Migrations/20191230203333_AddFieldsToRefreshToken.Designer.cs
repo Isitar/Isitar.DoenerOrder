@@ -3,15 +3,17 @@ using System;
 using Isitar.DoenerOrder.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Isitar.DoenerOrder.Data.Migrations
 {
     [DbContext(typeof(DoenerOrderContext))]
-    partial class DoenerOrderContextModelSnapshot : ModelSnapshot
+    [Migration("20191230203333_AddFieldsToRefreshToken")]
+    partial class AddFieldsToRefreshToken
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

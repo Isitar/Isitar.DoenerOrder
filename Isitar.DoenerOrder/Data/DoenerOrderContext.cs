@@ -20,6 +20,7 @@ namespace Isitar.DoenerOrder.Data
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<ProductIngredient> ProductIngredients { get; set; }
         public virtual DbSet<Ingredient> Ingredients { get; set; }
+        public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -31,6 +32,7 @@ namespace Isitar.DoenerOrder.Data
             builder.ApplyConfiguration(new ProductEntityConfiguration());
             builder.ApplyConfiguration(new ProductIngredientEntityConfiguration());
             builder.ApplyConfiguration(new SupplierEntityConfiguration());
+            builder.ApplyConfiguration(new RefreshTokenEntityConfiguration());
         }
     }
 }

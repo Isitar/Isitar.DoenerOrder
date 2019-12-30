@@ -4,12 +4,15 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Text;
 using Isitar.DoenerOrder.Contracts.Requests;
+using Isitar.DoenerOrder.Data;
 using Isitar.DoenerOrder.Domain;
 using Isitar.DoenerOrder.Domain.DAO;
 using Isitar.DoenerOrder.Domain.Responses;
 using Isitar.DoenerOrder.Options;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Isitar.DoenerOrder.Services
@@ -19,18 +22,34 @@ namespace Isitar.DoenerOrder.Services
         private UserManager<User> userManager;
         private readonly RoleManager<Role> roleManager;
         private readonly JwtSettings jwtSettings;
+        private readonly TokenValidationParameters tokenValidationParameters;
+        private readonly DoenerOrderContext dbContext;
 
-        public IdentityService(UserManager<User> userManager, RoleManager<Role> roleManager, JwtSettings jwtSettings)
+        private const string jwtUserIdClaimName = "isitar.ch/user_id";
+
+        public IdentityService(UserManager<User> userManager,
+            RoleManager<Role> roleManager,
+            JwtSettings jwtSettings,
+            TokenValidationParameters tokenValidationParameters,
+            DoenerOrderContext dbContext)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.jwtSettings = jwtSettings;
+            this.tokenValidationParameters = tokenValidationParameters;
+            this.dbContext = dbContext;
         }
 
-        public async Task<AuthResponse> LoginAsync(LoginViewModel loginViewModel)
+        /// <summary>
+        /// Generates a AuthResponse based on existing login data
+        /// </summary>
+        /// <param name="username">the username</param>
+        /// <param name="password">the unhashed password</param>
+        /// <returns>An AuthResponse with either the token inside or an error message</returns>
+        public async Task<AuthResponse> LoginAsync(string username, string password)
         {
-            var user = await userManager.FindByNameAsync(loginViewModel.Username);
-            var res = await userManager.CheckPasswordAsync(user, loginViewModel.Password);
+            var user = await userManager.FindByNameAsync(username);
+            var res = await userManager.CheckPasswordAsync(user, password);
             if (!res)
             {
                 return new AuthResponse
@@ -39,10 +58,94 @@ namespace Isitar.DoenerOrder.Services
                 };
             }
 
+            return await GenerateAuthenticationResultForUserAsync(user);
+        }
+
+        /// <summary>
+        /// Registers a new user with the given parameters
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="email"></param>
+        /// <param name="password"></param>
+        /// <returns>true if everything worked, false otherwise</returns>
+        public async Task<bool> RegisterAsync(string username, string email, string password)
+        {
+            var res = await userManager.CreateAsync(new User
+                {
+                    UserName = username,
+                    Email = email,
+                },
+                password);
+            return res.Succeeded;
+        }
+
+        /// <summary>
+        /// Generates a new AuthResponse with the given refreshToken and jwtToken
+        /// </summary>
+        /// <param name="refreshTokenString">the refresh token</param>
+        /// <param name="jwtToken">the jwt token</param>
+        /// <returns>A new AuthResponse containing either the tokens or error messages</returns>
+        public async Task<AuthResponse> RefreshAsync(string refreshTokenString, string jwtToken)
+        {
+            var errorResponse = new AuthResponse
+            {
+                Message = "Invalid token"
+            };
+
+            var validatedToken = GetPrincipalFromToken(jwtToken);
+            if (null == validatedToken)
+            {
+                return errorResponse;
+            }
+
+            var expiryDateUnix =
+                long.Parse(validatedToken.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
+
+            var expiryDateTimeUtc = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+                .AddSeconds(expiryDateUnix);
+
+            if (expiryDateTimeUtc > DateTime.UtcNow)
+            {
+                return errorResponse;
+            }
+
+            var jti = validatedToken.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
+
+            var storedRefreshToken =
+                await dbContext.RefreshTokens.SingleOrDefaultAsync(x => x.Token == refreshTokenString);
+            var userId = int.Parse(validatedToken.Claims.Single(x => x.Type == jwtUserIdClaimName).Value);
+            
+            if (storedRefreshToken == null
+                || DateTime.UtcNow > storedRefreshToken.Expires
+                || storedRefreshToken.Invalidated
+                || storedRefreshToken.Used
+                || storedRefreshToken.JwtTokenId != jti
+                || userId != storedRefreshToken.UserId
+            )
+            {
+                return errorResponse;
+            }
+
+            storedRefreshToken.Used = true;
+            dbContext.RefreshTokens.Update(storedRefreshToken);
+            await dbContext.SaveChangesAsync();
+
+            
+            var user = await userManager.FindByIdAsync(userId.ToString());
+            return await GenerateAuthenticationResultForUserAsync(user);
+        }
+
+        /// <summary>
+        /// Generates the Token for the given user. Saves the refresh token in the database
+        /// </summary>
+        /// <param name="user">the user the token should be generated for</param>
+        /// <returns>The AuthResponse with the token</returns>
+        private async Task<AuthResponse> GenerateAuthenticationResultForUserAsync(User user)
+        {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Secret));
             var singingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var expiry = DateTime.UtcNow.Add(jwtSettings.TokenLifetime);
-            var claims = await GetValidClaims(user);
+            var claims = await GetValidClaimsAsync(user);
 
             var token = new JwtSecurityToken(
                 jwtSettings.Issuer,
@@ -52,25 +155,26 @@ namespace Isitar.DoenerOrder.Services
                 signingCredentials: singingCredentials
             );
 
+            var refreshToken = new RefreshToken
+            {
+                JwtTokenId = token.Id,
+                Token = Guid.NewGuid().ToString(),
+                UserId = user.Id,
+                Expires = DateTime.UtcNow.AddMonths(3)
+            };
+
+            await dbContext.RefreshTokens.AddAsync(refreshToken);
+            await dbContext.SaveChangesAsync();
+
             return new AuthResponse
             {
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
+                RefreshToken = refreshToken.Token,
                 Success = true
             };
         }
 
-        public async Task<bool> RegisterAsync(RegistrationViewModel registrationViewModel)
-        {
-            var res = await userManager.CreateAsync(new User
-                {
-                    UserName = registrationViewModel.Username,
-                    Email = registrationViewModel.Email,
-                },
-                registrationViewModel.Password);
-            return res.Succeeded;
-        }
-
-        private async Task<IEnumerable<Claim>> GetValidClaims(User user)
+        private async Task<IEnumerable<Claim>> GetValidClaimsAsync(User user)
         {
             var identityOptions = new IdentityOptions();
             var claims = new List<Claim>
@@ -81,6 +185,7 @@ namespace Isitar.DoenerOrder.Services
                     ClaimValueTypes.Integer64),
                 new Claim(identityOptions.ClaimsIdentity.UserIdClaimType, user.Id.ToString()),
                 new Claim(identityOptions.ClaimsIdentity.UserNameClaimType, user.UserName),
+                new Claim(jwtUserIdClaimName, user.Id.ToString()),
             };
             var userClaims = await userManager.GetClaimsAsync(user);
             claims.AddRange(userClaims);
@@ -89,14 +194,46 @@ namespace Isitar.DoenerOrder.Services
             {
                 claims.Add(new Claim(ClaimTypes.Role, userRole));
                 var role = await roleManager.FindByNameAsync(userRole);
-                if (role != null)
+                if (role == null)
                 {
-                    var roleClaims = await roleManager.GetClaimsAsync(role);
-                    claims.AddRange(roleClaims);
+                    continue;
                 }
+
+                var roleClaims = await roleManager.GetClaimsAsync(role);
+                claims.AddRange(roleClaims);
             }
 
             return claims;
+        }
+
+        private ClaimsPrincipal GetPrincipalFromToken(string token)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            try
+            {
+                var modifiedTokenValidationParameters = this.tokenValidationParameters.Clone();
+                modifiedTokenValidationParameters.ValidateLifetime = false;
+                var principal =
+                    tokenHandler.ValidateToken(token, modifiedTokenValidationParameters, out var validatedToken);
+                if (!IsJwtWithValidSecurityAlgorithm(validatedToken))
+                {
+                    return null;
+                }
+
+                return principal;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private bool IsJwtWithValidSecurityAlgorithm(SecurityToken validatedToken)
+        {
+            return (validatedToken is JwtSecurityToken jwtSecurityToken) &&
+                   jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
+                       StringComparison.InvariantCultureIgnoreCase);
         }
     }
 }
