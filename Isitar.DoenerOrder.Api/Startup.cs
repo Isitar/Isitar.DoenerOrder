@@ -1,8 +1,8 @@
 using FluentValidation;
 using Isitar.DoenerOrder.Api.Infrastructure;
 using Isitar.DoenerOrder.Api.Services;
-using Isitar.DoenerOrder.Api.Core.Data;
-using Isitar.DoenerOrder.Api.Data;
+using Isitar.DoenerOrder.Auth.Data;
+using Isitar.DoenerOrder.Core.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using MediatR;
@@ -30,6 +30,10 @@ namespace Isitar.DoenerOrder.Api
             services.AddDbContext<DoenerOrderContext>(options =>
             {
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
+            });
+            services.AddDbContext<AppIdentityDbContext>(options =>
+            {
+                options.UseNpgsql(Configuration.GetConnectionString("IdentityConnection"));
             });
 
             IdentitySetup.ConfigureService(services);

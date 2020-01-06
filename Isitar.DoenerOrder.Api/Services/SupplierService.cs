@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Isitar.DoenerOrder.Api.Contracts.V1.Responses;
-using Isitar.DoenerOrder.Api.Core.Data;
-using Isitar.DoenerOrder.Api.Core.Domain.DAO;
+using Isitar.DoenerOrder.Core.Data;
+using Isitar.DoenerOrder.Core.Data.DAO;
 using Microsoft.EntityFrameworkCore;
 
 namespace Isitar.DoenerOrder.Api.Services

@@ -4,7 +4,7 @@ using Isitar.DoenerOrder.Api.Contracts.V1;
 using Isitar.DoenerOrder.Api.Contracts.V1.Requests;
 using Isitar.DoenerOrder.Api.Contracts.V1.Responses;
 using Isitar.DoenerOrder.Api.Services;
-using Isitar.DoenerOrder.Api.Core.Data;
+using Isitar.DoenerOrder.Core.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

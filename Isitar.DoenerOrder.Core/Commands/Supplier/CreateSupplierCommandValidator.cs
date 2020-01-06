@@ -1,7 +1,6 @@
-using System.Data;
 using FluentValidation;
 
-namespace Isitar.DoenerOrder.Commands.Supplier
+namespace Isitar.DoenerOrder.Core.Commands.Supplier
 {
     public class CreateSupplierCommandValidator : AbstractValidator<CreateSupplierCommand>
     {

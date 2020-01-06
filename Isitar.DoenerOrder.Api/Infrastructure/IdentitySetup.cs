@@ -1,5 +1,5 @@
-using Isitar.DoenerOrder.Api.Core.Data;
-using Isitar.DoenerOrder.Api.Core.Domain.DAO;
+using Isitar.DoenerOrder.Auth.Data.DAO;
+using Isitar.DoenerOrder.Core.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,7 +9,7 @@ namespace Isitar.DoenerOrder.Api.Infrastructure
     {
         public static void ConfigureService(IServiceCollection services)
         {
-            services.AddIdentity<User, Role>(options =>
+            services.AddIdentity<AppUser, AppRole>(options =>
                 {
                     options.User.RequireUniqueEmail = true;
 

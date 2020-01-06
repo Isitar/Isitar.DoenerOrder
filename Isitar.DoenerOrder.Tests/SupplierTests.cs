@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Isitar.DoenerOrder.Contracts.Requests;
+using Isitar.DoenerOrder.Api.Contracts.V1.Responses;
 using Xunit;
 
 namespace Isitar.DoenerOrder.Tests

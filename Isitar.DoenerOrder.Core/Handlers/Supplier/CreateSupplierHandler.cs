@@ -1,10 +1,10 @@
 using System.Threading;
 using System.Threading.Tasks;
-using Isitar.DoenerOrder.Commands.Supplier;
-using Isitar.DoenerOrder.Data;
+using Isitar.DoenerOrder.Core.Commands.Supplier;
+using Isitar.DoenerOrder.Core.Data;
 using MediatR;
 
-namespace Isitar.DoenerOrder.Handlers.Supplier
+namespace Isitar.DoenerOrder.Core.Handlers.Supplier
 {
     public class CreateSupplierHandler : IRequestHandler<CreateSupplierCommand, int>
     {
@@ -17,7 +17,7 @@ namespace Isitar.DoenerOrder.Handlers.Supplier
 
         public async Task<int> Handle(CreateSupplierCommand request, CancellationToken cancellationToken)
         {
-            var supplier = await dbContext.Suppliers.AddAsync(new Domain.DAO.Supplier
+            var supplier = await dbContext.Suppliers.AddAsync(new Data.DAO.Supplier
             {
                 Name = request.Name.Trim(),
                 Email = request.Email.Trim(),

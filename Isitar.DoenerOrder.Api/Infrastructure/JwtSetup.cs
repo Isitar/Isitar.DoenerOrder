@@ -1,7 +1,7 @@
 using System.Reflection;
 using System.Text;
 using Isitar.DoenerOrder.Api.Helpers.Auth;
-using Isitar.DoenerOrder.Api.Options;
+using Isitar.DoenerOrder.Auth.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;

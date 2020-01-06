@@ -1,9 +1,8 @@
-using Isitar.DoenerOrder.Domain;
-using Isitar.DoenerOrder.Domain.DAO;
+using Isitar.DoenerOrder.Core.Data.DAO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Isitar.DoenerOrder.Data.EntityConfigurations
+namespace Isitar.DoenerOrder.Core.Data.EntityConfigurations
 {
     public class ProductIngredientEntityConfiguration : IEntityTypeConfiguration<ProductIngredient>
     {

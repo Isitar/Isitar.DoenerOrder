@@ -21,6 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Isitar.DoenerOrder.Auth\Isitar.DoenerOrder.Auth.csproj" />
       <ProjectReference Include="..\Isitar.DoenerOrder.Core\Isitar.DoenerOrder.Core.csproj" />
     </ItemGroup>
 

@@ -14,7 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Isitar.DoenerOrder\Isitar.DoenerOrder.csproj" />
+      <ProjectReference Include="..\Isitar.DoenerOrder.Api\Isitar.DoenerOrder.Api.csproj" />
     </ItemGroup>
 
 </Project>

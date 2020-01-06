@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace Isitar.DoenerOrder.Api.Contracts.V1.Requests
 {
     public class LoginViewModel

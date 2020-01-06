@@ -1,13 +1,11 @@
-using Microsoft.AspNetCore.Identity;
-
-namespace Isitar.DoenerOrder.Core.DAO
+namespace Isitar.DoenerOrder.Core.Data.DAO
 {
-public class User : IdentityUser<int>
-{
-    [PersonalData]
-    public string Firstname { get; set; }
+    public class User
+    {
+        public string Firstname { get; set; }
 
-    [PersonalData]
-    public string Lastname { get; set; }
-}
+        public string Lastname { get; set; }
+
+        public string Acronym { get; set; }
+    }
 }

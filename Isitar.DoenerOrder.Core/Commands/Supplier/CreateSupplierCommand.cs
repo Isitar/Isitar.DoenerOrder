@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace Isitar.DoenerOrder.Commands.Supplier
+namespace Isitar.DoenerOrder.Core.Commands.Supplier
 {
     public class CreateSupplierCommand : IRequest<int>
     {

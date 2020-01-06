@@ -1,12 +1,10 @@
-using Isitar.DoenerOrder.Data.EntityConfigurations;
-using Isitar.DoenerOrder.Domain;
-using Isitar.DoenerOrder.Domain.DAO;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Isitar.DoenerOrder.Core.Data.DAO;
+using Isitar.DoenerOrder.Core.Data.EntityConfigurations;
 using Microsoft.EntityFrameworkCore;
 
-namespace Isitar.DoenerOrder.Data
+namespace Isitar.DoenerOrder.Core.Data
 {
-    public class DoenerOrderContext : IdentityDbContext<User, Role, int>
+    public class DoenerOrderContext : DbContext
     {
         public DoenerOrderContext(DbContextOptions options) : base(options)
         {
@@ -20,7 +18,6 @@ namespace Isitar.DoenerOrder.Data
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<ProductIngredient> ProductIngredients { get; set; }
         public virtual DbSet<Ingredient> Ingredients { get; set; }
-        public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -32,7 +29,6 @@ namespace Isitar.DoenerOrder.Data
             builder.ApplyConfiguration(new ProductEntityConfiguration());
             builder.ApplyConfiguration(new ProductIngredientEntityConfiguration());
             builder.ApplyConfiguration(new SupplierEntityConfiguration());
-            builder.ApplyConfiguration(new RefreshTokenEntityConfiguration());
         }
     }
 }

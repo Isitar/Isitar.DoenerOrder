@@ -1,4 +1,4 @@
-using Isitar.DoenerOrder.Api.Services;
+using Isitar.DoenerOrder.Auth.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Isitar.DoenerOrder.Api.Infrastructure

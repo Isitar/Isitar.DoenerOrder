@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Isitar.DoenerOrder.Core.DAO
+namespace Isitar.DoenerOrder.Core.Data.DAO
 {
     public class Supplier
     {
