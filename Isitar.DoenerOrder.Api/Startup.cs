@@ -2,6 +2,8 @@ using FluentValidation;
 using Isitar.DoenerOrder.Api.Infrastructure;
 using Isitar.DoenerOrder.Api.Services;
 using Isitar.DoenerOrder.Auth.Data;
+using Isitar.DoenerOrder.Core.Behaviors;
+using Isitar.DoenerOrder.Core.Commands.Supplier;
 using Isitar.DoenerOrder.Core.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -40,8 +42,9 @@ namespace Isitar.DoenerOrder.Api
             JwtSetup.ConfigureService(services, Configuration);
             SwaggerSetup.ConfigureService(services);
             
-            services.AddMediatR(typeof(Startup));
-            services.AddValidatorsFromAssembly(typeof(Startup).Assembly);
+            services.AddMediatR(typeof(CreateSupplierCommand).Assembly);
+            services.AddValidatorsFromAssembly(typeof(CreateSupplierCommand).Assembly);
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
             
             ServiceSetup.ConfigureService(services);
 
@@ -53,9 +56,10 @@ namespace Isitar.DoenerOrder.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DoenerOrderContext dbContext)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DoenerOrderContext dbContext, AppIdentityDbContext appIdentityDbContext)
         {
             dbContext.Database.Migrate();
+            appIdentityDbContext.Database.Migrate();
 
             if (env.IsDevelopment())
             {

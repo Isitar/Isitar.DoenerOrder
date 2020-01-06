@@ -68,8 +68,6 @@
         <e p="appsettings.Development.json" t="Include" />
         <e p="appsettings.json" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
-        <e p="mono_crash.mem.7597.1.blob" t="Include" />
-        <e p="mono_crash.mem.8212.1.blob" t="Include" />
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
             <e p="netcoreapp3.1" t="Include">
@@ -118,6 +116,9 @@
         </e>
       </e>
       <e p="Isitar.DoenerOrder.Core" t="IncludeRecursive">
+        <e p="Behaviors" t="Include">
+          <e p="ValidationBehavior.cs" t="Include" />
+        </e>
         <e p="Commands" t="Include">
           <e p="Supplier" t="Include">
             <e p="CreateSupplierCommand.cs" t="Include" />
@@ -144,18 +145,33 @@
             <e p="ProductEntityConfiguration.cs" t="Include" />
             <e p="ProductIngredientEntityConfiguration.cs" t="Include" />
             <e p="SupplierEntityConfiguration.cs" t="Include" />
+            <e p="UserEntityConfiguration.cs" t="Include" />
           </e>
-          <e p="Migrations" t="Include" />
+          <e p="Migrations" t="Include">
+            <e p="20200106203453_Initial.Designer.cs" t="Include" />
+            <e p="20200106203453_Initial.cs" t="Include" />
+            <e p="DoenerOrderContextModelSnapshot.cs" t="Include" />
+          </e>
         </e>
         <e p="Handlers" t="Include">
           <e p="Supplier" t="Include">
-            <e p="CreateSupplierHandler.cs" t="Include" />
+            <e p="CreateSupplierCommandHandler.cs" t="Include" />
+            <e p="GetSupplierByIdQueryHandler.cs" t="Include" />
           </e>
         </e>
         <e p="Isitar.DoenerOrder.Core.csproj" t="IncludeRecursive" />
         <e p="Queries" t="Include">
           <e p="Supplier" t="Include">
             <e p="GetAllSuppliersQuery.cs" t="Include" />
+            <e p="GetSupplierByIdQuery.cs" t="Include" />
+          </e>
+        </e>
+        <e p="Responses" t="Include">
+          <e p="Response.cs" t="Include" />
+          <e p="Supplier" t="Include">
+            <e p="SupplierDTO.cs" t="Include" />
+            <e p="SupplierResponse.cs" t="Include" />
+            <e p="SuppliersResponse.cs" t="Include" />
           </e>
         </e>
         <e p="bin" t="ExcludeRecursive" />
@@ -167,14 +183,13 @@
           </e>
         </e>
       </e>
-      <e p="Isitar.DoenerOrder.Tests" t="IncludeRecursive">
-        <e p="Isitar.DoenerOrder.Tests.csproj" t="IncludeRecursive" />
-        <e p="SupplierTests.cs" t="Include" />
+      <e p="Isitar.DoenerOrder.Core.Tests" t="IncludeRecursive">
+        <e p="Isitar.DoenerOrder.Core.Tests.csproj" t="IncludeRecursive" />
         <e p="bin" t="ExcludeRecursive" />
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
             <e p="netcoreapp3.1" t="Include">
-              <e p="Isitar.DoenerOrder.Tests.AssemblyInfo.cs" t="Include" />
+              <e p="Isitar.DoenerOrder.Core.Tests.AssemblyInfo.cs" t="Include" />
             </e>
           </e>
         </e>

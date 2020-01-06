@@ -6,7 +6,7 @@ namespace Isitar.DoenerOrder.Core.Data
 {
     public class DoenerOrderContext : DbContext
     {
-        public DoenerOrderContext(DbContextOptions options) : base(options)
+        public DoenerOrderContext(DbContextOptions<DoenerOrderContext> options) : base(options)
         {
         }
 

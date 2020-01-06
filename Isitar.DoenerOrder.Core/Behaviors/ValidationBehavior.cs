@@ -1,0 +1,51 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using FluentValidation;
+using FluentValidation.Results;
+using Isitar.DoenerOrder.Core.Responses;
+using MediatR;
+
+namespace Isitar.DoenerOrder.Core.Behaviors
+{
+    public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> 
+        where TRequest : IRequest<TResponse> where TResponse : Response
+    {
+        private readonly IEnumerable<IValidator<TRequest>> validators;
+
+        public ValidationBehavior(IEnumerable<IValidator<TRequest>> validators)
+        {
+            this.validators = validators;
+        }
+
+        public Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
+        {
+            var context = new ValidationContext(request);
+            var failures = validators
+                .Select(validator => validator.Validate(context))
+                .SelectMany(res => res.Errors)
+                .Where(err => null != err)
+                .ToList();
+            if (failures.Count != 0)
+            {
+                var response = Activator.CreateInstance<TResponse>();
+                response.Success = false;
+                response.ErrorMessages = new Dictionary<string, IList<string>>();
+                foreach (var failure in failures)
+                {
+                    if (!response.ErrorMessages.ContainsKey(failure.PropertyName))
+                    {
+                        response.ErrorMessages.Add(failure.PropertyName, new List<string>());
+                    }
+                    response.ErrorMessages[failure.PropertyName].Add(failure.ErrorMessage);
+                }
+
+                return Task.Run(() => response, cancellationToken);
+            }
+
+            return next();
+        }
+    }
+}

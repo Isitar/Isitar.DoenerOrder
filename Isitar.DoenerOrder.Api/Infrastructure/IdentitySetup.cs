@@ -1,3 +1,4 @@
+using Isitar.DoenerOrder.Auth.Data;
 using Isitar.DoenerOrder.Auth.Data.DAO;
 using Isitar.DoenerOrder.Core.Data;
 using Microsoft.AspNetCore.Builder;
@@ -19,7 +20,7 @@ namespace Isitar.DoenerOrder.Api.Infrastructure
                     options.Password.RequireNonAlphanumeric = true;
                     options.Password.RequireDigit = true;
                 })
-                .AddEntityFrameworkStores<DoenerOrderContext>();
+                .AddEntityFrameworkStores<AppIdentityDbContext>();
         }
 
         public static void ConfigureApplication(IApplicationBuilder app)

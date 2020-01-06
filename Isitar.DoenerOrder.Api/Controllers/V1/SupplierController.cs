@@ -4,7 +4,10 @@ using Isitar.DoenerOrder.Api.Contracts.V1;
 using Isitar.DoenerOrder.Api.Contracts.V1.Requests;
 using Isitar.DoenerOrder.Api.Contracts.V1.Responses;
 using Isitar.DoenerOrder.Api.Services;
+using Isitar.DoenerOrder.Core.Commands.Supplier;
 using Isitar.DoenerOrder.Core.Data;
+using Isitar.DoenerOrder.Core.Queries.Supplier;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,31 +15,27 @@ namespace Isitar.DoenerOrder.Api.Controllers.V1
 {
     public class SupplierController : ApiController
     {
-        private readonly DoenerOrderContext dbContext;
-        private readonly SupplierService supplierService;
+        private readonly IMediator mediator;
 
-        public SupplierController(DoenerOrderContext dbContext, SupplierService supplierService)
+        public SupplierController(IMediator mediator)
         {
-            this.dbContext = dbContext;
-            this.supplierService = supplierService;
+            this.mediator = mediator;
         }
         
         [HttpGet(ApiRoutes.Suppliers.GetAll)]
         public async Task<ActionResult<IAsyncEnumerable<SupplierDTO>>> GetAll()
         {
-            return Ok(await supplierService.GetAllAsync());
+            var query = new GetAllSuppliersQuery();
+            var result = await mediator.Send(query);
+            return result.Success ? (ActionResult<IAsyncEnumerable<SupplierDTO>>) Ok(result.Data) : BadRequest(result.ErrorMessages);
         }
         
         [HttpGet(ApiRoutes.Suppliers.Get)]
         public async Task<ActionResult<SupplierDTO>> Get(int supplierId)
         {
-            var supplier = await supplierService.GetAsync(supplierId);
-            if (null == supplier)
-            {
-                return NotFound();
-            }
-
-            return Ok(supplier);
+            var query = new GetSupplierByIdQuery {Id = supplierId};
+            var result = await mediator.Send(query);
+            return result.Success ? (ActionResult<SupplierDTO>) Ok(result.Data) : BadRequest(result.ErrorMessages);
         }
 
 
@@ -50,31 +49,17 @@ namespace Isitar.DoenerOrder.Api.Controllers.V1
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<ActionResult<SupplierDTO>> Create(CreateSupplierViewModel createSupplierViewModel)
         {
-            var supplier = await supplierService.CreateAsync(createSupplierViewModel.Name, createSupplierViewModel.Email, createSupplierViewModel.Phone);
-            if (null == supplier)
+            var command = new CreateSupplierCommand
             {
-                return BadRequest();
-            }
-            return CreatedAtAction(nameof(Get), new {supplierId = supplier.Id}, supplier);
-        }
-
-        /// <summary>
-        /// Updates a supplier
-        /// </summary>
-        /// <param name="supplierId"></param>
-        /// <param name="updateSupplierView"></param>
-        /// <returns>the updated supplier</returns>
-        [HttpPut(ApiRoutes.Suppliers.Update)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        public async Task<ActionResult<SupplierDTO>> Create(int supplierId, UpdateSupplierViewModel updateSupplierView)
-        {
-            var supplier = await supplierService.UpdateAsync(supplierId, updateSupplierView.Name, updateSupplierView.Email, updateSupplierView.Phone);
-            if (null == supplier)
-            {
-                return BadRequest();
-            }
-            return Ok(supplier);
+                Name = createSupplierViewModel.Name,
+                Email = createSupplierViewModel.Email,
+                Phone = createSupplierViewModel.Phone
+            };
+            var result = await mediator.Send(command);
+            return result.Success
+                ? (ActionResult<SupplierDTO>) CreatedAtAction(nameof(Get), new {supplierId = result.Data.Id},
+                    result.Data)
+                : BadRequest(result.ErrorMessages);
         }
     }
 }

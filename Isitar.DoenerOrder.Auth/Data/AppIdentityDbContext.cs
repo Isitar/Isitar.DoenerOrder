@@ -9,7 +9,7 @@ namespace Isitar.DoenerOrder.Auth.Data
     public class AppIdentityDbContext : IdentityDbContext<AppUser, AppRole, int>
     {
         
-        public AppIdentityDbContext(DbContextOptions options) : base(options)
+        public AppIdentityDbContext(DbContextOptions<AppIdentityDbContext> options) : base(options)
         {
         }
         
