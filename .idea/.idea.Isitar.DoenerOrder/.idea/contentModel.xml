@@ -59,16 +59,13 @@
         <e p="Responses" t="Include">
           <e p="SupplierResponse.cs" t="Include" />
         </e>
-        <e p="Services" t="Include" />
         <e p="Startup.cs" t="Include" />
         <e p="WeatherForecast.cs" t="Include" />
         <e p="appsettings.Development.json" t="Include" />
         <e p="appsettings.json" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
-        <e p="mono_crash.mem.11060.1.blob" t="Include" />
-        <e p="mono_crash.mem.22837.1.blob" t="Include" />
-        <e p="mono_crash.mem.9169.1.blob" t="Include" />
-        <e p="mono_crash.mem.9834.1.blob" t="Include" />
+        <e p="mono_crash.mem.26225.1.blob" t="Include" />
+        <e p="mono_crash.mem.30289.1.blob" t="Include" />
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
             <e p="netcoreapp3.1" t="Include">
@@ -122,6 +119,8 @@
         </e>
         <e p="Commands" t="Include">
           <e p="Supplier" t="Include">
+            <e p="CreateProductForSupplierCommand.cs" t="Include" />
+            <e p="CreateProductForSupplierCommandValidator.cs" t="Include" />
             <e p="CreateSupplierCommand.cs" t="Include" />
             <e p="CreateSupplierCommandValidator.cs" t="Include" />
             <e p="UpdateSupplierCommand.cs" t="Include" />

@@ -13,6 +13,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Isitar.DoenerOrder.Api.Controllers.V1
 {
+    /// <summary>
+    /// Supplier controller to manage supplier resources
+    /// </summary>
     public class SupplierController : ApiController
     {
         private readonly IMediator mediator;
@@ -61,6 +64,31 @@ namespace Isitar.DoenerOrder.Api.Controllers.V1
             return result.Success
                 ? (ActionResult<SupplierDTO>) CreatedAtAction(nameof(Get), new {supplierId = result.Data.Id},
                     SupplierDTO.FromCoreSupplierDTO(result.Data))
+                : BadRequest(result.ErrorMessages);
+        }
+
+        
+        /// <summary>
+        /// Updates a supplier, keep in mind all properties will be updated
+        /// </summary>
+        /// <param name="supplierId">the id of the supplier to update</param>
+        /// <param name="updateSupplierViewModel">how to update the supplier</param>
+        /// <returns></returns>
+        [HttpPut(ApiRoutes.Suppliers.Update)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public async Task<ActionResult<SupplierDTO>> Update(int supplierId, UpdateSupplierViewModel updateSupplierViewModel)
+        {
+            var command = new UpdateSupplierCommand
+            {
+                Id = supplierId,
+                Name = updateSupplierViewModel.Name,
+                Email = updateSupplierViewModel.Email,
+                Phone = updateSupplierViewModel.Phone
+            };
+            var result = await mediator.Send(command);
+            return result.Success
+                ? (ActionResult<SupplierDTO>) Ok(SupplierDTO.FromCoreSupplierDTO(result.Data))
                 : BadRequest(result.ErrorMessages);
         }
     }
