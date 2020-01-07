@@ -59,15 +59,16 @@
         <e p="Responses" t="Include">
           <e p="SupplierResponse.cs" t="Include" />
         </e>
-        <e p="Services" t="Include">
-          <e p="ISupplierService.cs" t="Include" />
-          <e p="SupplierService.cs" t="Include" />
-        </e>
+        <e p="Services" t="Include" />
         <e p="Startup.cs" t="Include" />
         <e p="WeatherForecast.cs" t="Include" />
         <e p="appsettings.Development.json" t="Include" />
         <e p="appsettings.json" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
+        <e p="mono_crash.mem.11060.1.blob" t="Include" />
+        <e p="mono_crash.mem.22837.1.blob" t="Include" />
+        <e p="mono_crash.mem.9169.1.blob" t="Include" />
+        <e p="mono_crash.mem.9834.1.blob" t="Include" />
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
             <e p="netcoreapp3.1" t="Include">
@@ -123,6 +124,8 @@
           <e p="Supplier" t="Include">
             <e p="CreateSupplierCommand.cs" t="Include" />
             <e p="CreateSupplierCommandValidator.cs" t="Include" />
+            <e p="UpdateSupplierCommand.cs" t="Include" />
+            <e p="UpdateSupplierCommandValidator.cs" t="Include" />
           </e>
         </e>
         <e p="Data" t="Include">
@@ -156,7 +159,9 @@
         <e p="Handlers" t="Include">
           <e p="Supplier" t="Include">
             <e p="CreateSupplierCommandHandler.cs" t="Include" />
+            <e p="GetAllSuppliersQueryHandler.cs" t="Include" />
             <e p="GetSupplierByIdQueryHandler.cs" t="Include" />
+            <e p="UpdateSupplierCommandHandler.cs" t="Include" />
           </e>
         </e>
         <e p="Isitar.DoenerOrder.Core.csproj" t="IncludeRecursive" />
@@ -184,9 +189,11 @@
         </e>
       </e>
       <e p="Isitar.DoenerOrder.Core.Tests" t="IncludeRecursive">
+        <e p="DatabaseHelper.cs" t="Include" />
         <e p="Isitar.DoenerOrder.Core.Tests.csproj" t="IncludeRecursive" />
         <e p="Supplier" t="Include">
           <e p="CreateSupplierTests.cs" t="Include" />
+          <e p="UpdateSupplierTests.cs" t="Include" />
         </e>
         <e p="bin" t="ExcludeRecursive" />
         <e p="obj" t="ExcludeRecursive">

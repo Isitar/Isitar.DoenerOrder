@@ -10,7 +10,7 @@ namespace Isitar.DoenerOrder.Api.Contracts.V1.Responses
         public string Email { get; set; }
         public string Phone { get; set; }
 
-        public static SupplierDTO FromSupplier(Supplier s)
+        public static SupplierDTO FromCoreSupplierDTO(Core.Responses.Supplier.SupplierDTO s)
         {
             return new SupplierDTO
             {

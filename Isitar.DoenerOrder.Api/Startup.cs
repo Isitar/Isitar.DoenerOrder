@@ -1,6 +1,5 @@
 using FluentValidation;
 using Isitar.DoenerOrder.Api.Infrastructure;
-using Isitar.DoenerOrder.Api.Services;
 using Isitar.DoenerOrder.Auth.Data;
 using Isitar.DoenerOrder.Core.Behaviors;
 using Isitar.DoenerOrder.Core.Commands.Supplier;
@@ -51,8 +50,6 @@ namespace Isitar.DoenerOrder.Api
             services.AddCors(options =>
                 options.AddPolicy("AllowAll", builder => { builder.WithOrigins("*").AllowAnyMethod(); })
             );
-
-            services.AddScoped<SupplierService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

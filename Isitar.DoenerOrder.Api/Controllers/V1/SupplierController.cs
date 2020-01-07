@@ -1,9 +1,9 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Isitar.DoenerOrder.Api.Contracts.V1;
 using Isitar.DoenerOrder.Api.Contracts.V1.Requests;
 using Isitar.DoenerOrder.Api.Contracts.V1.Responses;
-using Isitar.DoenerOrder.Api.Services;
 using Isitar.DoenerOrder.Core.Commands.Supplier;
 using Isitar.DoenerOrder.Core.Data;
 using Isitar.DoenerOrder.Core.Queries.Supplier;
@@ -27,15 +27,17 @@ namespace Isitar.DoenerOrder.Api.Controllers.V1
         {
             var query = new GetAllSuppliersQuery();
             var result = await mediator.Send(query);
-            return result.Success ? (ActionResult<IAsyncEnumerable<SupplierDTO>>) Ok(result.Data) : BadRequest(result.ErrorMessages);
+            return result.Success ? (ActionResult<IAsyncEnumerable<SupplierDTO>>) Ok(result.Data.Select(SupplierDTO.FromCoreSupplierDTO)) : BadRequest(result.ErrorMessages);
         }
         
         [HttpGet(ApiRoutes.Suppliers.Get)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<SupplierDTO>> Get(int supplierId)
         {
             var query = new GetSupplierByIdQuery {Id = supplierId};
             var result = await mediator.Send(query);
-            return result.Success ? (ActionResult<SupplierDTO>) Ok(result.Data) : BadRequest(result.ErrorMessages);
+            return result.Success ? (ActionResult<SupplierDTO>) Ok(SupplierDTO.FromCoreSupplierDTO(result.Data)) : NotFound(result.ErrorMessages);
         }
 
 
@@ -58,7 +60,7 @@ namespace Isitar.DoenerOrder.Api.Controllers.V1
             var result = await mediator.Send(command);
             return result.Success
                 ? (ActionResult<SupplierDTO>) CreatedAtAction(nameof(Get), new {supplierId = result.Data.Id},
-                    result.Data)
+                    SupplierDTO.FromCoreSupplierDTO(result.Data))
                 : BadRequest(result.ErrorMessages);
         }
     }
