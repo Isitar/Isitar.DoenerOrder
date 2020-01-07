@@ -185,6 +185,9 @@
       </e>
       <e p="Isitar.DoenerOrder.Core.Tests" t="IncludeRecursive">
         <e p="Isitar.DoenerOrder.Core.Tests.csproj" t="IncludeRecursive" />
+        <e p="Supplier" t="Include">
+          <e p="CreateSupplierTests.cs" t="Include" />
+        </e>
         <e p="bin" t="ExcludeRecursive" />
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
