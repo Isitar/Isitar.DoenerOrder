@@ -40,7 +40,7 @@ namespace Isitar.DoenerOrder.Core.Tests.Supplier
             Assert.Equal(cmd.Email, queryOneResponse.Data.Email);
             Assert.Equal(cmd.Name, queryOneResponse.Data.Name);
             Assert.Equal(cmd.Phone, queryOneResponse.Data.Phone);
-            
+
             var queryAll = new GetAllSuppliersQuery();
             var queryAllHandler = new GetAllSuppliersQueryHandler(context);
             var queryAllResponse = await queryAllHandler.Handle(queryAll, CancellationToken.None);
@@ -76,7 +76,7 @@ namespace Isitar.DoenerOrder.Core.Tests.Supplier
             Assert.Contains(resultInvalidMail.Errors, e => e.PropertyName == nameof(cmdInvalidMail.Email));
             Assert.DoesNotContain(resultInvalidMail.Errors, e => e.PropertyName == nameof(cmdInvalidMail.Name));
             Assert.DoesNotContain(resultInvalidMail.Errors, e => e.PropertyName == nameof(cmdInvalidMail.Phone));
-            
+
             var cmdMissingName = new CreateSupplierCommand
             {
                 Email = "someValidMail@gmail.com",
@@ -89,9 +89,52 @@ namespace Isitar.DoenerOrder.Core.Tests.Supplier
             Assert.DoesNotContain(resultMissingName.Errors, e => e.PropertyName == nameof(cmdMissingName.Phone));
 
         }
-        
-        
-        [Fact]
+
+        [Theory]
+        [InlineData("salidu")]
+        [InlineData("salidu@")]
+        [InlineData("@salidu")]
+        [InlineData("sali du@gmail.com")]
+        [InlineData(";du@gmail.com")]
+        [InlineData("saldu;@gmail.com")]
+        [InlineData("saldu@gma;il.com")]
+        [InlineData("saldu@gmail.c;om")]
+        public async Task ValidateEmail(string email)
+        {
+            var createSupplierCommand = new CreateSupplierCommand
+            {
+                Name = "Pascal",
+                Phone = "+41 79 456 45 45",
+                Email = email,
+            };
+            
+            var createSupplierCommandValidator = new CreateSupplierCommandValidator();
+            var result = await createSupplierCommandValidator.ValidateAsync(createSupplierCommand);
+            Assert.False(result.IsValid);
+            Assert.NotEmpty(result.Errors);
+            Assert.Contains(result.Errors, e => e.PropertyName == nameof(createSupplierCommand.Email));
+            Assert.DoesNotContain(result.Errors, e => e.PropertyName == nameof(createSupplierCommand.Name));
+            Assert.DoesNotContain(result.Errors, e => e.PropertyName == nameof(createSupplierCommand.Phone));
+            
+            var updateSupplierCommand = new UpdateSupplierCommand
+            {
+                Id = 1,
+                Name = "Pascal",
+                Phone = "+41 79 456 45 45",
+                Email = email,
+            };
+            var updateSupplierCommandValidator = new UpdateSupplierCommandValidator();
+            result = await updateSupplierCommandValidator.ValidateAsync(updateSupplierCommand);
+            Assert.False(result.IsValid);
+            Assert.NotEmpty(result.Errors);
+            Assert.Contains(result.Errors, e => e.PropertyName == nameof(updateSupplierCommand.Email));
+            Assert.DoesNotContain(result.Errors, e => e.PropertyName == nameof(updateSupplierCommand.Id));
+            Assert.DoesNotContain(result.Errors, e => e.PropertyName == nameof(updateSupplierCommand.Name));
+            Assert.DoesNotContain(result.Errors, e => e.PropertyName == nameof(updateSupplierCommand.Phone));
+        }
+
+
+    [Fact]
         public async Task TestUpdateSupplierSuccess()
         {
             await using var context = DatabaseHelper.CreateInMemoryDatabaseContext(nameof(TestUpdateSupplierSuccess));
