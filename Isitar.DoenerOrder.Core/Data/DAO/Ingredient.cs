@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Isitar.DoenerOrder.Core.Data.DAO
 {
-    public class Ingredient
+    internal class Ingredient
     {
         public int Id { get; set; }
         public string Label { get; set; }

@@ -17,6 +17,7 @@
           <e p="V1" t="Include">
             <e p="ApiRoutes.cs" t="Include" />
             <e p="Requests" t="Include">
+              <e p="CreateProductViewModel.cs" t="Include" />
               <e p="CreateSupplierViewModel.cs" t="Include" />
               <e p="LoginViewModel.cs" t="Include" />
               <e p="RefreshTokenViewModel.cs" t="Include" />
@@ -26,7 +27,8 @@
             <e p="Responses" t="Include">
               <e p="AuthFailedResponse.cs" t="Include" />
               <e p="AuthSuccessResponse.cs" t="Include" />
-              <e p="SupplierDTO.cs" t="Include" />
+              <e p="ProductDto.cs" t="Include" />
+              <e p="SupplierDto.cs" t="Include" />
             </e>
           </e>
         </e>
@@ -64,8 +66,9 @@
         <e p="appsettings.Development.json" t="Include" />
         <e p="appsettings.json" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
-        <e p="mono_crash.mem.26225.1.blob" t="Include" />
-        <e p="mono_crash.mem.30289.1.blob" t="Include" />
+        <e p="mono_crash.mem.17017.1.blob" t="Include" />
+        <e p="mono_crash.mem.17361.1.blob" t="Include" />
+        <e p="mono_crash.mem.18353.1.blob" t="Include" />
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
             <e p="netcoreapp3.1" t="Include">
@@ -157,7 +160,9 @@
         </e>
         <e p="Handlers" t="Include">
           <e p="Supplier" t="Include">
+            <e p="CreateProductForSupplierCommandHandler.cs" t="Include" />
             <e p="CreateSupplierCommandHandler.cs" t="Include" />
+            <e p="GetAllProductsForSupplierQueryHandler.cs" t="Include" />
             <e p="GetAllSuppliersQueryHandler.cs" t="Include" />
             <e p="GetSupplierByIdQueryHandler.cs" t="Include" />
             <e p="UpdateSupplierCommandHandler.cs" t="Include" />
@@ -166,14 +171,21 @@
         <e p="Isitar.DoenerOrder.Core.csproj" t="IncludeRecursive" />
         <e p="Queries" t="Include">
           <e p="Supplier" t="Include">
+            <e p="GetAllProductsForSupplierQuery.cs" t="Include" />
             <e p="GetAllSuppliersQuery.cs" t="Include" />
+            <e p="GetProductForSupplierByIdQuery.cs" t="Include" />
             <e p="GetSupplierByIdQuery.cs" t="Include" />
           </e>
         </e>
         <e p="Responses" t="Include">
+          <e p="Product" t="Include">
+            <e p="ProductDto.cs" t="Include" />
+            <e p="ProductResponse.cs" t="Include" />
+            <e p="ProductsResponse.cs" t="Include" />
+          </e>
           <e p="Response.cs" t="Include" />
           <e p="Supplier" t="Include">
-            <e p="SupplierDTO.cs" t="Include" />
+            <e p="SupplierDto.cs" t="Include" />
             <e p="SupplierResponse.cs" t="Include" />
             <e p="SuppliersResponse.cs" t="Include" />
           </e>
@@ -191,9 +203,10 @@
         <e p="DatabaseHelper.cs" t="Include" />
         <e p="Isitar.DoenerOrder.Core.Tests.csproj" t="IncludeRecursive" />
         <e p="Supplier" t="Include">
-          <e p="CreateSupplierTests.cs" t="Include" />
-          <e p="UpdateSupplierTests.cs" t="Include" />
+          <e p="SupplierCrudTests.cs" t="Include" />
+          <e p="SupplierProductTests.cs" t="Include" />
         </e>
+        <e p="ValidModelCreator.cs" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">

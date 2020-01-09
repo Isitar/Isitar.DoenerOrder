@@ -1,15 +1,15 @@
 namespace Isitar.DoenerOrder.Core.Responses.Supplier
 {
-    public class SupplierDTO
+    public class SupplierDto
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
 
-        public static SupplierDTO FromSupplier(Data.DAO.Supplier supplier)
+        internal static SupplierDto FromSupplier(Data.DAO.Supplier supplier)
         {
-            return new SupplierDTO
+            return new SupplierDto
             {
                 Id = supplier.Id,
                 Name = supplier.Name,

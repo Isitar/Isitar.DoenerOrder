@@ -10,7 +10,7 @@ using Xunit;
 
 namespace Isitar.DoenerOrder.Core.Tests.Supplier
 {
-    public class CreateSupplierTests
+    public class SupplierCrudTests
     {
         [Fact]
         public async Task TestCreateSuccess()
@@ -88,6 +88,55 @@ namespace Isitar.DoenerOrder.Core.Tests.Supplier
             Assert.DoesNotContain(resultMissingName.Errors, e => e.PropertyName == nameof(cmdMissingName.Email));
             Assert.DoesNotContain(resultMissingName.Errors, e => e.PropertyName == nameof(cmdMissingName.Phone));
 
+        }
+        
+        
+        [Fact]
+        public async Task TestUpdateSupplierSuccess()
+        {
+            await using var context = DatabaseHelper.CreateInMemoryDatabaseContext(nameof(TestUpdateSupplierSuccess));
+
+
+            var createSupplierCommand = new CreateSupplierCommand
+            {
+                Name = "Supplier 123",
+                Email = "supplier@gmail.com",
+                Phone = "+41 79 456 45 45",
+            };
+            var createSupplierHandler = new CreateSupplierCommandHandler(context);
+            var supplierResponse = await createSupplierHandler.Handle(createSupplierCommand, CancellationToken.None);
+            Assert.True(supplierResponse.Success);
+
+            var updateCmd1 = new UpdateSupplierCommand
+            {
+                Id = supplierResponse.Data.Id,
+                Name = "something",
+                Email = "something@gmail.com",
+                Phone = null,
+            };
+
+            var updateHandler = new UpdateSupplierCommandHandler(context);
+            var queryOneHandler = new GetSupplierByIdQueryHandler(context);
+            var response1 = await updateHandler.Handle(updateCmd1, CancellationToken.None);
+            Assert.True(response1.Success);
+            var updatedSupplier = (await queryOneHandler.Handle(new GetSupplierByIdQuery {Id = updateCmd1.Id}, CancellationToken.None)).Data;
+            Assert.Equal(updateCmd1.Name, updatedSupplier.Name);
+            Assert.Equal(updateCmd1.Email, updatedSupplier.Email);
+            Assert.Equal(updateCmd1.Phone, updatedSupplier.Phone);
+            var updateCmd2 = new UpdateSupplierCommand
+            {
+                Id = supplierResponse.Data.Id,
+                Name = "something new",
+                Email = "validMail@mail.ch",
+                Phone = "+41 79 456 45 45",
+            };
+            
+            var response2 = await updateHandler.Handle(updateCmd2, CancellationToken.None);
+            Assert.True(response2.Success);
+            var updatedAgain = (await queryOneHandler.Handle(new GetSupplierByIdQuery {Id = updateCmd1.Id}, CancellationToken.None)).Data;
+            Assert.Equal(updateCmd2.Name, updatedAgain.Name);
+            Assert.Equal(updateCmd2.Email, updatedAgain.Email);
+            Assert.Equal(updateCmd2.Phone, updatedAgain.Phone);
         }
     }
 }

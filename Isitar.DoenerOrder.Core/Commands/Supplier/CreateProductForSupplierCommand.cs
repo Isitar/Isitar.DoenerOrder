@@ -1,6 +1,9 @@
+using Isitar.DoenerOrder.Core.Responses.Product;
+using MediatR;
+
 namespace Isitar.DoenerOrder.Core.Commands.Supplier
 {
-    public class CreateProductForSupplierCommand
+    public class CreateProductForSupplierCommand : IRequest<ProductResponse>
     {
         public int SupplierId { get; set; }
         public string Label { get; set; }

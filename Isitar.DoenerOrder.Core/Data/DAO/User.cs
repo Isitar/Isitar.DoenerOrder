@@ -1,6 +1,6 @@
 namespace Isitar.DoenerOrder.Core.Data.DAO
 {
-    public class User
+    internal class User
     {
         public int Id { get; set; }
         

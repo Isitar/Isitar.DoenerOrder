@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Isitar.DoenerOrder.Core.Data.EntityConfigurations
 {
-    public class OrderEntityConfiguration : IEntityTypeConfiguration<Order>
+    internal class OrderEntityConfiguration : IEntityTypeConfiguration<Order>
     {
         public void Configure(EntityTypeBuilder<Order> builder)
         {

@@ -10,14 +10,14 @@ namespace Isitar.DoenerOrder.Core.Data
         {
         }
 
-        public virtual DbSet<BulkOrder> BulkOrders { get; set; }
-        public virtual DbSet<Order> Orders { get; set; }
-        public virtual DbSet<OrderLine> OrderLines { get; set; }
+        internal virtual DbSet<BulkOrder> BulkOrders { get; set; }
+        internal virtual DbSet<Order> Orders { get; set; }
+        internal virtual DbSet<OrderLine> OrderLines { get; set; }
 
-        public virtual DbSet<Supplier> Suppliers { get; set; }
-        public virtual DbSet<Product> Products { get; set; }
-        public virtual DbSet<ProductIngredient> ProductIngredients { get; set; }
-        public virtual DbSet<Ingredient> Ingredients { get; set; }
+        internal virtual DbSet<Supplier> Suppliers { get; set; }
+        internal virtual DbSet<Product> Products { get; set; }
+        internal virtual DbSet<ProductIngredient> ProductIngredients { get; set; }
+        internal virtual DbSet<Ingredient> Ingredients { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

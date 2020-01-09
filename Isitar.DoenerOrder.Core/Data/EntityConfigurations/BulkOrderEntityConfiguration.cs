@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Isitar.DoenerOrder.Core.Data.EntityConfigurations
 {
-    public class BulkOrderEntityConfiguration : IEntityTypeConfiguration<BulkOrder>
+    internal class BulkOrderEntityConfiguration : IEntityTypeConfiguration<BulkOrder>
     {
         public void Configure(EntityTypeBuilder<BulkOrder> builder)
         {

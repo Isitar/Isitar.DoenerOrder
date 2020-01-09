@@ -1,6 +1,6 @@
 namespace Isitar.DoenerOrder.Core.Data.DAO
 {
-    public class ProductIngredient
+    internal class ProductIngredient
     {
         public int ProductId { get; set; }
         public Product Product { get; set; }

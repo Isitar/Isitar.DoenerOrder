@@ -27,7 +27,7 @@ namespace Isitar.DoenerOrder.Core.Handlers.Supplier
             await dbContext.SaveChangesAsync(cancellationToken);
             return new SupplierResponse
             {
-                Data = SupplierDTO.FromSupplier(supplier.Entity),
+                Data = SupplierDto.FromSupplier(supplier.Entity),
                 Success =  true,
             };
         }

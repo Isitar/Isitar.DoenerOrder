@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Isitar.DoenerOrder.Core.Data.DAO
 {
-    public class BulkOrder
+    internal class BulkOrder
     {
         public int Id { get; set; }
         

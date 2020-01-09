@@ -39,7 +39,7 @@ namespace Isitar.DoenerOrder.Core.Handlers.Supplier
             return new SupplierResponse
             {
                 Success = true,
-                Data = SupplierDTO.FromSupplier(supplier)
+                Data = SupplierDto.FromSupplier(supplier)
             };
         }
     }

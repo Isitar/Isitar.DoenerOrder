@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Isitar.DoenerOrder.Core.Data.EntityConfigurations
 {
-    public class UserEntityConfiguration : IEntityTypeConfiguration<User>
+    internal class UserEntityConfiguration : IEntityTypeConfiguration<User>
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {

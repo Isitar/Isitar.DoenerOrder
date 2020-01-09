@@ -20,7 +20,7 @@ namespace Isitar.DoenerOrder.Core.Handlers.Supplier
 
         public async Task<SuppliersResponse> Handle(GetAllSuppliersQuery request, CancellationToken cancellationToken)
         {
-            var suppliers = await dbContext.Suppliers.Select(s => SupplierDTO.FromSupplier(s)).ToListAsync();
+            var suppliers = await dbContext.Suppliers.Select(s => SupplierDto.FromSupplier(s)).ToListAsync();
             return new SuppliersResponse
             {
                 Data = suppliers,

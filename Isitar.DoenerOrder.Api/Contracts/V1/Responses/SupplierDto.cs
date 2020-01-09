@@ -3,16 +3,16 @@ using Isitar.DoenerOrder.Core.Data.DAO;
 namespace Isitar.DoenerOrder.Api.Contracts.V1.Responses
 
 {
-    public class SupplierDTO
+    public class SupplierDto 
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
-
-        public static SupplierDTO FromCoreSupplierDTO(Core.Responses.Supplier.SupplierDTO s)
+        
+        public static SupplierDto FromCoreSupplierDTO(Core.Responses.Supplier.SupplierDto s)
         {
-            return new SupplierDTO
+            return new SupplierDto
             {
                 Id = s.Id,
                 Name = s.Name,

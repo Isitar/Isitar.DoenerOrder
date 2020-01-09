@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Isitar.DoenerOrder.Core.Data.EntityConfigurations
 {
-    public class ProductEntityConfiguration : IEntityTypeConfiguration<Product>
+    internal class ProductEntityConfiguration : IEntityTypeConfiguration<Product>
     {
         public void Configure(EntityTypeBuilder<Product> builder)
         {
@@ -13,6 +13,7 @@ namespace Isitar.DoenerOrder.Core.Data.EntityConfigurations
             builder.Property(x => x.Price).IsRequired(true);
             builder.HasOne(x => x.Supplier)
                 .WithMany(x => x.Products)
+                .HasForeignKey(x => x.SupplierId)
                 .IsRequired(true);
         }
     }
