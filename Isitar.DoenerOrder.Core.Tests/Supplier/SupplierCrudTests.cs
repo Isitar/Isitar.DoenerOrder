@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Isitar.DoenerOrder.Core.Commands.Supplier;
 using Isitar.DoenerOrder.Core.Data;
 using Isitar.DoenerOrder.Core.Handlers.Supplier;
+using Isitar.DoenerOrder.Core.Handlers.Supplier.CommandHandlers;
+using Isitar.DoenerOrder.Core.Handlers.Supplier.QueryHandlers;
 using Isitar.DoenerOrder.Core.Queries.Supplier;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
