@@ -1,5 +1,7 @@
 \documentclass[12pt, a4paper]{article}
+\usepackage[T1]{fontenc} 
 \usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
 \usepackage{amsfonts}
 \usepackage{amsmath}
 \usepackage{graphicx}
@@ -8,97 +10,41 @@
 \usepackage{tikz}
 \usepackage{hyperref}
 \usepackage{titlesec}
+\usepackage[lmargin=2cm,rmargin=2cm,tmargin=3cm,bmargin=2cm]{geometry}
+
+\input{./defineLanguage.tex}
+
+%tikz config
 \usetikzlibrary{er,positioning}
 
-\title{Key learnings for this project}
-\author{Pascal Lüscher}
-\makeindex
-\lstloadlanguages{C,C++,csh,Java}
 
+\makeindex
+
+
+% paragraph indent and line height
+\setlength{\parindent}{0em}
+\setlength{\parskip}{1em}
+%\renewcommand{\baselinestretch}{1}
+
+%section = new page
+\pagenumbering{arabic}
 \newcommand{\sectionbreak}{\clearpage}
 
-\definecolor{red}{rgb}{0.6,0,0} 
-\definecolor{blue}{rgb}{0,0,0.6}
-\definecolor{green}{rgb}{0,0.8,0}
-\definecolor{cyan}{rgb}{0.0,0.6,0.6}
-\definecolor{mygray}{rgb}{0.97, 0.97, 0.97}
-
-\lstdefinelanguage{sharpc}{
-language=csh,
-basicstyle=\footnotesize\ttfamily,
-% numbers=left,
-% numberstyle=\tiny,
-% numbersep=5pt,
-tabsize=2,
-extendedchars=true,
-breaklines=true,
-frame=b,
-stringstyle=\color{red}\ttfamily,
-showspaces=false,
-showtabs=false,
-xleftmargin=5pt,
-framexleftmargin=5pt,
-framexrightmargin=5pt,
-framexbottommargin=4pt,
-commentstyle=\color{green},
-morecomment=[l]{//}, %use comment-line-style!
-morecomment=[s]{/*}{*/}, %for multiline comments
-showstringspaces=false,
-morekeywords={ abstract, as, base, bool, 
-break, byte, case, catch, 
-char, checked, class, const, 
-continue, decimal, default, delegate, 
-do, double, else, enum, 
-event, explicit, extern, false, 
-finally, fixed, float, for, 
-foreach, goto, if, implicit, 
-in, int, interface, internal, 
-is, lock, long, namespace, 
-new, null, object, operator, 
-out, override, params, private, 
-protected, public, readonly, ref, 
-return, sbyte, sealed, short, 
-sizeof, stackalloc, static, string, 
-struct, switch, this, throw, 
-true, try, typeof, uint, 
-ulong, unchecked, unsafe, ushort, 
-using, using static, virtual, void, 
-volatile, while,add, alias, ascending,
-async, await, by,
-descending, dynamic, equals,
-from, get, global,
-group, into, join,
-let, nameof, on,
-orderby, partial,
-remove, select, set,
-unmanaged, value, var,
-when, where, yield},
-keywordstyle=\color{blue},
-identifierstyle=\color{black},
-backgroundcolor=\color{mygray},
-}
-
-\lstdefinelanguage{XML}
-{
-	morestring=[b]",
-	morestring=[s]{>}{<},
-	morecomment=[s]{<?}{?>},
-	stringstyle=\color{black},
-	identifierstyle=\color{blue},
-	keywordstyle=\color{cyan},
-	morekeywords={xmlns,version,type}% list your attributes here
-}
-
+% set default language for lstset
 \lstset{language=sharpc}
 
 \begin{document}
+\title{Key learnings for this project}
+\author{Pascal Lüscher}
+
 \maketitle
+\thispagestyle{empty}
 \tableofcontents{}
 
 \section{Entity Framework}
 
 \subsection{Packages}
-\begin{table}[h!]
+\begin{table}
 \centering
 	\begin{tabular}{|l l|}
 		\hline
@@ -111,9 +57,18 @@ backgroundcolor=\color{mygray},
 	\end{tabular}
 \end{table}
 
+When splitting the entity framework code into a separate project, the startup project and the context needs to be passed to the migrate command äöü
+
+\begin{lstlisting}[language=bash]
+dotnet ef migrations add NAME \
+-o Data/Migrations \
+--startup-project ../Isitar.DoenerOrder.Api/Isitar.DoenerOrder.Api.csproj \
+--context AppIdentityDbContext
+\end{lstlisting}
+
 \subsection{CLI}
 
-\begin{table}[h!]
+\begin{table}
 \centering
 	\begin{tabular}{|l l|}
 		\hline
@@ -166,7 +121,7 @@ protected override void OnModelCreating(ModelBuilder builder)
 
 \section{Authentication \& Authorization}
 \subsection{Packages}
-\begin{table}[h!]
+\begin{table}
 	\centering
 	\begin{tabular}{|l l|}
 		\hline
@@ -197,7 +152,7 @@ public class Role : IdentityRole<int>
 }
 \end{lstlisting}
 
-\noindent Make the DbContext either derrive from IdentityDbContext or make a new dbContext for Identity.
+Make the DbContext either derrive from IdentityDbContext or make a new dbContext for Identity.
 
 \begin{lstlisting}
 public class DoenerOrderContext : IdentityDbContext<User, Role, int>
@@ -207,7 +162,7 @@ public class DoenerOrderContext : IdentityDbContext<User, Role, int>
 }
 \end{lstlisting}
 
-\noindent Add the Identity to the services (in \lstinline|configureServices|)
+Add the Identity to the services (in \lstinline|configureServices|)
 
 \begin{lstlisting}
 services.AddIdentity<User, Role>(options =>
@@ -220,8 +175,9 @@ services.AddIdentity<User, Role>(options =>
 
 \subsection{Identity Usage}
 The identity framework can be used for several different authorization methods. 
-For an easier understanding what is going on, the following erd should help : 
-
+For an easier understanding what is going on, the following erd in \autoref{fig:asp_net_identity_classes} should help.
+\begin{figure}
+	\centering
 \begin{tikzpicture}[auto,node distance=1.5cm]
 \node[entity] (Users) {Users};
 \node[entity] (UserRoles) [right = of Users] {UserRoles};
@@ -233,8 +189,11 @@ For an easier understanding what is going on, the following erd should help :
 \path (Users) edge node {1..\(m\)} (UserClaims);
 \path (Roles) edge node {1..\(m\)} (RoleClaims);
 \end{tikzpicture}	
+\caption{erd of asp.net identity tables}
+\label{fig:asp_net_identity_classes}
+\end{figure}
 
-\noindent The authorization can be role-based or claim-based. 
+The authorization can be role-based or claim-based. 
 
 The role-based authorization uses checks if the \lstinline|Users| is in a \lstinline|Roles|. To check that simply add the \lstinline|[Authorize(Roles = "RoleName"])]| annotation to a controller method. If the method should be accessible for multiple roles, separate them with a comma: \lstinline|[Authorize(Roles = "Role1,Role2")]|. If more than one role is required, stack the \lstinline|Authrize| Annotations.
 \begin{lstlisting}
@@ -249,10 +208,8 @@ I added a helper class \lstinline|CustomClaimTypes| very similar to \lstinline|S
 \begin{lstlisting}
 public static class CustomClaimTypes
 {
-	private const string ClaimTypeNamespace 
-		= "http://isitar.ch";
-	public const string Permission 
-		= ClaimTypeNamespace + "/permission";
+	private const string ClaimTypeNamespace = "http://isitar.ch";
+	public const string Permission = ClaimTypeNamespace + "/permission";
 }
 \end{lstlisting}
 To keep permissions consistent and easy to manage, I also created the helper class \lstinline|ClaimPermissions| where I store all my permission strings.
@@ -272,8 +229,7 @@ services.AddAuthorization(options =>
 	)
 	{
 		var propertyValue = prop.GetValue(null).ToString();
-		options.AddPolicy(propertyValue, policy => 
-			policy.RequireClaim(CustomClaimTypes.Permission, propertyValue));
+		options.AddPolicy(propertyValue, policy => policy.RequireClaim(CustomClaimTypes.Permission, propertyValue));
 
 	}
 });
@@ -288,12 +244,10 @@ public async Task<IActionResult> DoSomething() {...}
 To add JWT support, the Authentiaction needs to be added to the services:
 
 \begin{lstlisting}
-services.AddAuthentication(config =>
-	{
-		config.DefaultAuthenticateScheme =
-			JwtBearerDefaults.AuthenticationScheme;
-		config.DefaultChallengeScheme =
-			JwtBearerDefaults.AuthenticationScheme;
+services
+	.AddAuthentication(config => {
+		config.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+		config.DefaultChallengeScheme =	JwtBearerDefaults.AuthenticationScheme;
 	})
 	.AddCookie(options => {
 		options.SlidingExpiration = true; 
@@ -301,8 +255,7 @@ services.AddAuthentication(config =>
 	.AddJwtBearer(JwtBearerDefaults.AuthenticationScheme,
 		options =>
 		{
-			var jwtSettings =
-				Configuration.GetSection("JwtSettings"); 
+			var jwtSettings = Configuration.GetSection("JwtSettings"); 
 			options.TokenValidationParameters = new TokenValidationParameters()
 			{
 				ValidateIssuer = true,
@@ -364,11 +317,11 @@ public async Task<IActionResult> GetTokenAsync([FromBody] LoginViewModel loginVi
 	);
 }
 \end{lstlisting}
-The \lstinline|GetValidClaims| method is explained in \ref{GetValidClaimsListing} 
+The \lstinline|GetValidClaims| method is explained in \autoref{lst:GetValidClaimsListing} 
 
 \subsection{JWT Authorization}
 When authorizing with the JWT-Token, ASP.NET assumes the claims are stored in the token. An easy thing to do is add all claims the user possesses into the token. For this I added a helper method in the \lstinline|LoginController|.
-\begin{lstlisting}[label=GetValidClaimsListing]
+\begin{lstlisting}[label=lst:GetValidClaimsListing]
 private async Task<IEnumerable<Claim>> GetValidClaims(User user)
 {
 	IdentityOptions identityOptions = new IdentityOptions();
@@ -401,7 +354,7 @@ private async Task<IEnumerable<Claim>> GetValidClaims(User user)
 
 \section{Swagger}
 \subsection{Packages}
-\begin{table}[h!]
+\begin{table}
 	\centering
 	\begin{tabular}{|l l|}
 		\hline

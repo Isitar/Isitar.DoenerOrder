@@ -1,0 +1,75 @@
+\usepackage{listings}
+
+\lstloadlanguages{C,C++,csh,Java}
+
+\definecolor{red}{rgb}{0.6,0,0} 
+\definecolor{blue}{rgb}{0,0,0.6}
+\definecolor{green}{rgb}{0,0.8,0}
+\definecolor{cyan}{rgb}{0.0,0.6,0.6}
+\definecolor{mygray}{rgb}{0.97, 0.97, 0.97}
+
+\lstdefinelanguage{sharpc}{
+language=csh,
+basicstyle=\footnotesize\ttfamily,
+% numbers=left,
+% numberstyle=\tiny,
+% numbersep=5pt,
+tabsize=2,
+extendedchars=true,
+breaklines=true,
+frame=b,
+stringstyle=\color{red}\ttfamily,
+showspaces=false,
+showtabs=false,
+xleftmargin=5pt,
+framexleftmargin=5pt,
+framexrightmargin=5pt,
+framexbottommargin=4pt,
+commentstyle=\color{green},
+morecomment=[l]{//}, %use comment-line-style!
+morecomment=[s]{/*}{*/}, %for multiline comments
+showstringspaces=false,
+morekeywords={ abstract, as, base, bool, 
+break, byte, case, catch, 
+char, checked, class, const, 
+continue, decimal, default, delegate, 
+do, double, else, enum, 
+event, explicit, extern, false, 
+finally, fixed, float, for, 
+foreach, goto, if, implicit, 
+in, int, interface, internal, 
+is, lock, long, namespace, 
+new, null, object, operator, 
+out, override, params, private, 
+protected, public, readonly, ref, 
+return, sbyte, sealed, short, 
+sizeof, stackalloc, static, string, 
+struct, switch, this, throw, 
+true, try, typeof, uint, 
+ulong, unchecked, unsafe, ushort, 
+using, using static, virtual, void, 
+volatile, while,add, alias, ascending,
+async, await, by,
+descending, dynamic, equals,
+from, get, global,
+group, into, join,
+let, nameof, on,
+orderby, partial,
+remove, select, set,
+unmanaged, value, var,
+when, where, yield},
+keywordstyle=\color{blue},
+identifierstyle=\color{black},
+backgroundcolor=\color{mygray},
+}
+
+\lstdefinelanguage{XML}
+{
+	morestring=[b]",
+	morestring=[s]{>}{<},
+	morecomment=[s]{<?}{?>},
+	stringstyle=\color{black},
+	identifierstyle=\color{blue},
+	keywordstyle=\color{cyan},
+	morekeywords={xmlns,version,type}% list your attributes here
+}
