@@ -153,6 +153,8 @@
           <e p="Migrations" t="Include">
             <e p="20200106203453_Initial.Designer.cs" t="Include" />
             <e p="20200106203453_Initial.cs" t="Include" />
+            <e p="20200111223212_UserTable.Designer.cs" t="Include" />
+            <e p="20200111223212_UserTable.cs" t="Include" />
             <e p="DoenerOrderContextModelSnapshot.cs" t="Include" />
           </e>
         </e>
