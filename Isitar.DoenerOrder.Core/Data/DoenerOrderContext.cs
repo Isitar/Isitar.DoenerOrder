@@ -10,6 +10,7 @@ namespace Isitar.DoenerOrder.Core.Data
         {
         }
 
+        internal virtual DbSet<User> Users { get; set; }
         internal virtual DbSet<BulkOrder> BulkOrders { get; set; }
         internal virtual DbSet<Order> Orders { get; set; }
         internal virtual DbSet<OrderLine> OrderLines { get; set; }
@@ -22,6 +23,7 @@ namespace Isitar.DoenerOrder.Core.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            builder.ApplyConfiguration(new UserEntityConfiguration());
             builder.ApplyConfiguration(new BulkOrderEntityConfiguration());
             builder.ApplyConfiguration(new IngredientEntityConfiguration());
             builder.ApplyConfiguration(new OrderEntityConfiguration());

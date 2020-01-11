@@ -6,7 +6,7 @@ using Isitar.DoenerOrder.Core.Queries.Supplier;
 using Isitar.DoenerOrder.Core.Responses.Supplier;
 using MediatR;
 
-namespace Isitar.DoenerOrder.Core.Handlers.Supplier
+namespace Isitar.DoenerOrder.Core.Handlers.Supplier.QueryHandlers
 {
     public class GetSupplierByIdQueryHandler : IRequestHandler<GetSupplierByIdQuery, SupplierResponse>
     {

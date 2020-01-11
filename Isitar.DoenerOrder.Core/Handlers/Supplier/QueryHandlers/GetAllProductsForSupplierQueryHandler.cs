@@ -7,7 +7,7 @@ using Isitar.DoenerOrder.Core.Responses.Product;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Isitar.DoenerOrder.Core.Handlers.Supplier
+namespace Isitar.DoenerOrder.Core.Handlers.Supplier.QueryHandlers
 {
     public class
         GetAllProductsForSupplierQueryHandler : IRequestHandler<GetAllProductsForSupplierQuery, ProductsResponse>

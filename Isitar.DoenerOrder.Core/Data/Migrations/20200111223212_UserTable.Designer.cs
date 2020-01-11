@@ -3,15 +3,17 @@ using System;
 using Isitar.DoenerOrder.Core.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Isitar.DoenerOrder.Core.Data.Migrations
 {
     [DbContext(typeof(DoenerOrderContext))]
-    partial class DoenerOrderContextModelSnapshot : ModelSnapshot
+    [Migration("20200111223212_UserTable")]
+    partial class UserTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

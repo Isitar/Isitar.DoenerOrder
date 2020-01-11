@@ -5,7 +5,7 @@ using Isitar.DoenerOrder.Core.Data;
 using Isitar.DoenerOrder.Core.Responses.Product;
 using MediatR;
 
-namespace Isitar.DoenerOrder.Core.Handlers.Supplier
+namespace Isitar.DoenerOrder.Core.Handlers.Supplier.CommandHandlers
 {
     public class CreateProductForSupplierCommandHandler : IRequestHandler<CreateProductForSupplierCommand, ProductResponse>
     {
