@@ -1,4 +1,4 @@
-\documentclass[12pt, a4paper]{article}
+\documentclass[12pt, a4paper, parskip=half]{scrreprt}
 \usepackage[T1]{fontenc} 
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
@@ -9,7 +9,6 @@
 \usepackage{xcolor}
 \usepackage{tikz}
 \usepackage{hyperref}
-\usepackage{titlesec}
 \usepackage[lmargin=2cm,rmargin=2cm,tmargin=3cm,bmargin=2cm]{geometry}
 
 \input{./defineLanguage.tex}
@@ -20,15 +19,7 @@
 
 \makeindex
 
-
-% paragraph indent and line height
-\setlength{\parindent}{0em}
-\setlength{\parskip}{1em}
-%\renewcommand{\baselinestretch}{1}
-
-%section = new page
 \pagenumbering{arabic}
-\newcommand{\sectionbreak}{\clearpage}
 
 % set default language for lstset
 \lstset{language=sharpc}
@@ -39,12 +30,12 @@
 
 \maketitle
 \thispagestyle{empty}
-\tableofcontents{}
+\tableofcontents
 
-\section{Entity Framework}
+\chapter{Entity Framework}
 
-\subsection{Packages}
-\begin{table}
+\section{Packages}
+\begin{table}[h!]
 \centering
 	\begin{tabular}{|l l|}
 		\hline
@@ -66,9 +57,9 @@ dotnet ef migrations add NAME \
 --context AppIdentityDbContext
 \end{lstlisting}
 
-\subsection{CLI}
+\section{CLI}
 
-\begin{table}
+\begin{table}[h!]
 \centering
 	\begin{tabular}{|l l|}
 		\hline
@@ -83,7 +74,7 @@ dotnet ef migrations add NAME \
 	\end{tabular}
 \end{table}
 
-\subsection{Configuration}
+\section{Configuration}
 Add the dbcontext to the service collection
 
 \begin{lstlisting}
@@ -95,7 +86,7 @@ services.AddDbContext<DoenerOrderContext>(options =>
 });
 \end{lstlisting}
 
-\subsection{Relations}
+\section{Relations}
 For a many to many relationship, a join-class is needed. In this example I used the join-class ProductIngredient for the Product $\leftrightarrow$ Ingredient relationship.
 
 \begin{lstlisting}
@@ -119,9 +110,9 @@ protected override void OnModelCreating(ModelBuilder builder)
 }
 \end{lstlisting}
 
-\section{Authentication \& Authorization}
-\subsection{Packages}
-\begin{table}
+\chapter{Authentication \& Authorization}
+\section{Packages}
+\begin{table}[h!]
 	\centering
 	\begin{tabular}{|l l|}
 		\hline
@@ -134,7 +125,7 @@ protected override void OnModelCreating(ModelBuilder builder)
 	\end{tabular}
 \end{table}
 
-\subsection{Identity Setup}
+\section{Identity Setup}
 Create a Model for the IdentityUser and IdentityRole (this is useful if I need to overwrite stuff / add fields etc.)
 \begin{lstlisting}
 public class User : IdentityUser<int>
@@ -173,7 +164,7 @@ services.AddIdentity<User, Role>(options =>
 .AddEntityFrameworkStores<DoenerOrderContext>();
 \end{lstlisting}
 
-\subsection{Identity Usage}
+\section{Identity Usage}
 The identity framework can be used for several different authorization methods. 
 For an easier understanding what is going on, the following erd in \autoref{fig:asp_net_identity_classes} should help.
 \begin{figure}
@@ -240,7 +231,7 @@ This adds all the permission claims as a \lstinline|Policy| and it can be checke
 public async Task<IActionResult> DoSomething() {...}
 \end{lstlisting}
 
-\subsection{JWT Authentication}
+\section{JWT Authentication}
 To add JWT support, the Authentiaction needs to be added to the services:
 
 \begin{lstlisting}
@@ -319,7 +310,7 @@ public async Task<IActionResult> GetTokenAsync([FromBody] LoginViewModel loginVi
 \end{lstlisting}
 The \lstinline|GetValidClaims| method is explained in \autoref{lst:GetValidClaimsListing} 
 
-\subsection{JWT Authorization}
+\section{JWT Authorization}
 When authorizing with the JWT-Token, ASP.NET assumes the claims are stored in the token. An easy thing to do is add all claims the user possesses into the token. For this I added a helper method in the \lstinline|LoginController|.
 \begin{lstlisting}[label=lst:GetValidClaimsListing]
 private async Task<IEnumerable<Claim>> GetValidClaims(User user)
@@ -352,9 +343,9 @@ private async Task<IEnumerable<Claim>> GetValidClaims(User user)
 }
 \end{lstlisting}
 
-\section{Swagger}
-\subsection{Packages}
-\begin{table}
+\chapter{Swagger}
+\section{Packages}
+	\begin{table}[h!]
 	\centering
 	\begin{tabular}{|l l|}
 		\hline
@@ -364,7 +355,7 @@ private async Task<IEnumerable<Claim>> GetValidClaims(User user)
 		\hline
 	\end{tabular}
 \end{table}
-\subsection{Setup}
+\section{Setup}
 To setup the swagger doc the generation needs to be added to the services. 
 \begin{lstlisting}
 services.AddSwaggerGen(c =>
