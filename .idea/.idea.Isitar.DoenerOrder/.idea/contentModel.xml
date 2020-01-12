@@ -22,6 +22,7 @@
               <e p="LoginViewModel.cs" t="Include" />
               <e p="RefreshTokenViewModel.cs" t="Include" />
               <e p="RegistrationViewModel.cs" t="Include" />
+              <e p="UpdateProductViewModel.cs" t="Include" />
               <e p="UpdateSupplierViewModel.cs" t="Include" />
             </e>
             <e p="Responses" t="Include">
@@ -66,7 +67,6 @@
         <e p="appsettings.Development.json" t="Include" />
         <e p="appsettings.json" t="Include" />
         <e p="bin" t="ExcludeRecursive" />
-        <e p="mono_crash.mem.18597.1.blob" t="Include" />
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
             <e p="netcoreapp3.1" t="Include">
@@ -124,6 +124,8 @@
             <e p="CreateProductForSupplierCommandValidator.cs" t="Include" />
             <e p="CreateSupplierCommand.cs" t="Include" />
             <e p="CreateSupplierCommandValidator.cs" t="Include" />
+            <e p="UpdateProductForSupplierCommand.cs" t="Include" />
+            <e p="UpdateProductForSupplierCommandValidator.cs" t="Include" />
             <e p="UpdateSupplierCommand.cs" t="Include" />
             <e p="UpdateSupplierCommandValidator.cs" t="Include" />
           </e>
@@ -163,6 +165,7 @@
             <e p="CommandHandlers" t="Include">
               <e p="CreateProductForSupplierCommandHandler.cs" t="Include" />
               <e p="CreateSupplierCommandHandler.cs" t="Include" />
+              <e p="UpdateProductForSupplierCommandHandler.cs" t="Include" />
               <e p="UpdateSupplierCommandHandler.cs" t="Include" />
             </e>
             <e p="QueryHandlers" t="Include">

@@ -25,6 +25,8 @@ namespace Isitar.DoenerOrder.Api.Controllers.V1
             this.mediator = mediator;
         }
 
+        #region supplier
+
         [HttpGet(ApiRoutes.Suppliers.GetAll)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -99,6 +101,15 @@ namespace Isitar.DoenerOrder.Api.Controllers.V1
                 : BadRequest(result.ErrorMessages);
         }
 
+        #endregion
+
+        #region supplier/:id/product
+
+        /// <summary>
+        /// Fetches all products of a given suppler
+        /// </summary>
+        /// <param name="supplierId">the supplier to fetch the products from</param>
+        /// <returns>a list of all products for this supplier</returns>
         [HttpGet(ApiRoutes.Suppliers.GetAllProducts)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -149,5 +160,15 @@ namespace Isitar.DoenerOrder.Api.Controllers.V1
                     ProductDto.FromCoreProductDto(result.Data))
                 : BadRequest(result.ErrorMessages);
         }
+
+        [HttpPut(ApiRoutes.Suppliers.UpdateProduct)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<ProductDto>> UpdateProduct(int supplierId, int productId,
+            [FromBody] UpdateProductViewModel updateProductViewModel)
+        {
+            var command = new UpdateProduct
+        }
+        #endregion
     }
 }

@@ -1,3 +1,4 @@
+using System.Linq;
 using FluentValidation;
 using Isitar.DoenerOrder.Core.Data;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +11,8 @@ namespace Isitar.DoenerOrder.Core.Commands.Supplier
         {
             RuleFor(x => x.SupplierId)
                 .NotEmpty()
-                .Must(x => context.Suppliers.Find(x) != null);
+                .Must(supplierId => context.Suppliers.Any(s => s.Id == supplierId))
+                .WithMessage("Supplier does not exist");
             RuleFor(x => x.Label)
                 .NotEmpty();
             RuleFor(x => x.Price)
