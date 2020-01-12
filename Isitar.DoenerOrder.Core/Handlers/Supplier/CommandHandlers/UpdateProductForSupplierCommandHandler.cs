@@ -31,9 +31,17 @@ namespace Isitar.DoenerOrder.Core.Handlers.Supplier.CommandHandlers
                     {
                         {nameof(request.ProductId), new[] {"No product found"}};
                     }
-                }
-                    
+                };
             }
+
+            product.Label = request.Label;
+            product.Price = request.Price;
+            await dbContext.SaveChangesAsync();
+            return new ProductResponse
+            {
+                Success = true,
+                Data = ProductDto.FromProduct(product),
+            };
         }
     }
 }
