@@ -5,7 +5,6 @@ using Isitar.DoenerOrder.Api.Contracts.V1;
 using Isitar.DoenerOrder.Api.Contracts.V1.Requests;
 using Isitar.DoenerOrder.Api.Contracts.V1.Responses;
 using Isitar.DoenerOrder.Core.Commands.Supplier;
-using Isitar.DoenerOrder.Core.Data;
 using Isitar.DoenerOrder.Core.Queries.Supplier;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -213,6 +212,16 @@ namespace Isitar.DoenerOrder.Api.Controllers.V1
                 {ProductId = result.Data, SupplierId = supplierId});
 
             return Ok(ProductDto.FromCoreProductDto(resultData.Data));
+        }
+
+        [HttpDelete(ApiRoutes.Suppliers.DeleteProduct)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> DeleteProduct(int supplierId, int productId)
+        {
+            var command = new DeleteProductForSupplierCommand {SupplierId = supplierId, ProductId = productId};
+            var result = await mediator.Send(command);
+            return result.Success ? (ActionResult) Ok(result.Success) : BadRequest(result.ErrorMessages);
         }
 
         #endregion
