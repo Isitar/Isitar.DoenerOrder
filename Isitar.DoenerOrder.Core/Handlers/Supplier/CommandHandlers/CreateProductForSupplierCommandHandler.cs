@@ -2,12 +2,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Isitar.DoenerOrder.Core.Commands.Supplier;
 using Isitar.DoenerOrder.Core.Data;
+using Isitar.DoenerOrder.Core.Responses;
 using Isitar.DoenerOrder.Core.Responses.Product;
 using MediatR;
 
 namespace Isitar.DoenerOrder.Core.Handlers.Supplier.CommandHandlers
 {
-    public class CreateProductForSupplierCommandHandler : IRequestHandler<CreateProductForSupplierCommand, ProductResponse>
+    public class CreateProductForSupplierCommandHandler : IRequestHandler<CreateProductForSupplierCommand, IntegerResponse>
     {
         private readonly DoenerOrderContext dbContext;
 
@@ -16,7 +17,7 @@ namespace Isitar.DoenerOrder.Core.Handlers.Supplier.CommandHandlers
             this.dbContext = dbContext;
         }
 
-        public async Task<ProductResponse> Handle(CreateProductForSupplierCommand request, CancellationToken cancellationToken)
+        public async Task<IntegerResponse> Handle(CreateProductForSupplierCommand request, CancellationToken cancellationToken)
         {
             var supplier = await dbContext.Suppliers.FindAsync(request.SupplierId);
             var product = await dbContext.Products.AddAsync(new Data.DAO.Product
@@ -26,9 +27,9 @@ namespace Isitar.DoenerOrder.Core.Handlers.Supplier.CommandHandlers
                 Supplier = supplier,
             }, cancellationToken);
             await dbContext.SaveChangesAsync(cancellationToken);
-            return new ProductResponse
+            return new IntegerResponse
             {
-                Data = ProductDto.FromProduct(product.Entity),
+                Data = product.Entity.Id,
                 Success =  true,
             };
         }

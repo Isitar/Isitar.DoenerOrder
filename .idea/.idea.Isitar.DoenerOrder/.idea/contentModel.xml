@@ -190,6 +190,7 @@
         </e>
         <e p="Responses" t="Include">
           <e p="BooleanResponse.cs" t="Include" />
+          <e p="IntegerResponse.cs" t="Include" />
           <e p="Product" t="Include">
             <e p="ProductDto.cs" t="Include" />
             <e p="ProductResponse.cs" t="Include" />

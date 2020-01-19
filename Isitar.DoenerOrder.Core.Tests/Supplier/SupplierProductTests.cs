@@ -20,7 +20,7 @@ namespace Isitar.DoenerOrder.Core.Tests.Supplier
             var createSupplierHandler = new CreateSupplierCommandHandler(context);
             var supplierResponse = await createSupplierHandler.Handle(createSupplierCommand, CancellationToken.None);
             Assert.True(supplierResponse.Success);
-            var supplierId = supplierResponse.Data.Id;
+            var supplierId = supplierResponse.Data;
 
             var createProductForSupplierCommand = new CreateProductForSupplierCommand
             {
@@ -32,21 +32,17 @@ namespace Isitar.DoenerOrder.Core.Tests.Supplier
             var response1 =
                 await createProductForSupplierHandler.Handle(createProductForSupplierCommand, CancellationToken.None);
             Assert.True(response1.Success);
-            Assert.Equal(createProductForSupplierCommand.Label, response1.Data.Label);
-            Assert.Equal(createProductForSupplierCommand.Price, response1.Data.Price);
-            Assert.Equal(createProductForSupplierCommand.SupplierId, response1.Data.SupplierId);
-
-            var productId = response1.Data.Id;
+            var productId = response1.Data;
 
             var queryOne = new GetProductForSupplierByIdQuery
                 {SupplierId = supplierId, ProductId = productId};
             var queryOneHandler = new GetProductForSupplierByIdQueryHandler(context);
             var queryOneResponse = await queryOneHandler.Handle(queryOne, CancellationToken.None);
             Assert.True(queryOneResponse.Success);
-            Assert.Equal(response1.Data.Id, queryOneResponse.Data.Id);
-            Assert.Equal(response1.Data.Label, queryOneResponse.Data.Label);
-            Assert.Equal(response1.Data.Price, queryOneResponse.Data.Price);
-            Assert.Equal(response1.Data.SupplierId, queryOneResponse.Data.SupplierId);
+            Assert.Equal(productId, queryOneResponse.Data.Id);
+            Assert.Equal(createProductForSupplierCommand.Label, queryOneResponse.Data.Label);
+            Assert.Equal(createProductForSupplierCommand.Price, queryOneResponse.Data.Price);
+            Assert.Equal(createProductForSupplierCommand.SupplierId, queryOneResponse.Data.SupplierId);
 
             var queryAll = new GetAllProductsForSupplierQuery {SupplierId = supplierId};
             var queryAllHandler = new GetAllProductsForSupplierQueryHandler(context);
@@ -54,10 +50,10 @@ namespace Isitar.DoenerOrder.Core.Tests.Supplier
             Assert.True(queryAllResponse.Success);
             var relevantProduct = queryAllResponse.Data.SingleOrDefault(p => p.Id == productId);
             Assert.NotNull(relevantProduct);
-            Assert.Equal(response1.Data.Id, relevantProduct.Id);
-            Assert.Equal(response1.Data.Label, relevantProduct.Label);
-            Assert.Equal(response1.Data.Price, relevantProduct.Price);
-            Assert.Equal(response1.Data.SupplierId, relevantProduct.SupplierId);
+            Assert.Equal(productId, relevantProduct.Id);
+            Assert.Equal(createProductForSupplierCommand.Label, relevantProduct.Label);
+            Assert.Equal(createProductForSupplierCommand.Price, relevantProduct.Price);
+            Assert.Equal(createProductForSupplierCommand.SupplierId, relevantProduct.SupplierId);
         }
 
         [Fact]
@@ -68,14 +64,15 @@ namespace Isitar.DoenerOrder.Core.Tests.Supplier
             var createSupplierHandler = new CreateSupplierCommandHandler(context);
             var supplierResponse = await createSupplierHandler.Handle(createSupplierCommand, CancellationToken.None);
             Assert.True(supplierResponse.Success);
-            var supplierId = supplierResponse.Data.Id;
+            var supplierId = supplierResponse.Data;
             var createProductForSupplierCommand = ValidModelCreator.CreateProductForSupplierCommand(supplierId);
             var createProductForSupplierHandler = new CreateProductForSupplierCommandHandler(context);
             var createProductResponse =
                 await createProductForSupplierHandler.Handle(createProductForSupplierCommand, CancellationToken.None);
             Assert.True(createProductResponse.Success);
-            var productId = createProductResponse.Data.Id;
-
+            var productId = createProductResponse.Data;
+            
+            //test update
             var updateProductCmd1 = new UpdateProductForSupplierCommand
             {
                 SupplierId = supplierId,
@@ -87,11 +84,6 @@ namespace Isitar.DoenerOrder.Core.Tests.Supplier
             var response1 =
                 await updateProductForSupplierCommandHandler.Handle(updateProductCmd1, CancellationToken.None);
             Assert.True(response1.Success);
-            Assert.Equal(supplierId, response1.Data.SupplierId);
-            Assert.Equal(productId, response1.Data.Id);
-            Assert.Equal("Something new", response1.Data.Label);
-            Assert.Equal(55.5m, response1.Data.Price);
-
             var getUpdatedProductQuery1 = new GetProductForSupplierByIdQuery
             {
                 SupplierId = supplierId,
@@ -107,6 +99,7 @@ namespace Isitar.DoenerOrder.Core.Tests.Supplier
             Assert.Equal("Something new", queryResp1.Data.Label);
             Assert.Equal(55.5m, queryResp1.Data.Price);
 
+            // test another update
             var updateProductCmd2 = new UpdateProductForSupplierCommand
             {
                 SupplierId = supplierId,
@@ -117,11 +110,17 @@ namespace Isitar.DoenerOrder.Core.Tests.Supplier
             var response2 =
                 await updateProductForSupplierCommandHandler.Handle(updateProductCmd2, CancellationToken.None);
             Assert.True(response2.Success);
-            Assert.Equal(supplierId, response2.Data.SupplierId);
-            Assert.Equal(productId, response2.Data.Id);
-            Assert.Equal("another thing", response2.Data.Label);
-            Assert.Equal(66.45798m, response2.Data.Price);
 
+            var queryResp2 =
+                await queryOneHandler.Handle(
+                    new GetProductForSupplierByIdQuery {SupplierId = supplierId, ProductId = productId},
+                    CancellationToken.None);
+            Assert.Equal(supplierId, queryResp2.Data.SupplierId);
+            Assert.Equal(productId, queryResp2.Data.Id);
+            Assert.Equal("another thing", queryResp2.Data.Label);
+            Assert.Equal(66.45798m, queryResp2.Data.Price);
+
+            // test no update if invalid data provided
             var reqInvalidSupplier = new UpdateProductForSupplierCommand
             {
                 SupplierId = supplierId + 1,
@@ -132,17 +131,14 @@ namespace Isitar.DoenerOrder.Core.Tests.Supplier
             var response3 =
                 await updateProductForSupplierCommandHandler.Handle(reqInvalidSupplier, CancellationToken.None);
             Assert.False(response3.Success);
-            var queryAfterInvalid = new GetProductForSupplierByIdQuery
-            {
-                SupplierId = supplierId,
-                ProductId = productId,
-            };
-            var queryRes2 = await queryOneHandler.Handle(queryAfterInvalid, CancellationToken.None);
-            Assert.True(queryRes2.Success);
-            Assert.Equal(supplierId, queryRes2.Data.SupplierId);
-            Assert.Equal(productId, queryRes2.Data.Id);
-            Assert.Equal("another thing", queryRes2.Data.Label);
-            Assert.Equal(66.45798m, queryRes2.Data.Price);
+            var queryResponse3 = await queryOneHandler.Handle(
+                new GetProductForSupplierByIdQuery {SupplierId = supplierId, ProductId = productId,},
+                CancellationToken.None);
+            Assert.True(queryResponse3.Success);
+            Assert.Equal(supplierId, queryResponse3.Data.SupplierId);
+            Assert.Equal(productId, queryResponse3.Data.Id);
+            Assert.Equal("another thing", queryResponse3.Data.Label);
+            Assert.Equal(66.45798m, queryResponse3.Data.Price);
         }
     }
 }

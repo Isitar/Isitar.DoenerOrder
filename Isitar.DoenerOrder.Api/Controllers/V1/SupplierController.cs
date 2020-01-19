@@ -69,10 +69,15 @@ namespace Isitar.DoenerOrder.Api.Controllers.V1
                 Phone = createSupplierViewModel.Phone
             };
             var result = await mediator.Send(command);
-            return result.Success
-                ? (ActionResult<SupplierDto>) CreatedAtAction(nameof(Get), new {supplierId = result.Data.Id},
-                    SupplierDto.FromCoreSupplierDTO(result.Data))
-                : BadRequest(result.ErrorMessages);
+            if (!result.Success)
+            {
+                return BadRequest(result.ErrorMessages);
+            }
+
+            var query = new GetSupplierByIdQuery {Id = result.Data};
+            var resultData = await mediator.Send(query);
+            return CreatedAtAction(nameof(Get), new {supplierId = result.Data},
+                SupplierDto.FromCoreSupplierDTO(resultData.Data));
         }
 
 
@@ -96,9 +101,13 @@ namespace Isitar.DoenerOrder.Api.Controllers.V1
                 Phone = updateSupplierViewModel.Phone
             };
             var result = await mediator.Send(command);
-            return result.Success
-                ? (ActionResult<SupplierDto>) Ok(SupplierDto.FromCoreSupplierDTO(result.Data))
-                : BadRequest(result.ErrorMessages);
+            if (!result.Success)
+            {
+                return BadRequest(result.ErrorMessages);
+            }
+
+            var resultData = await mediator.Send(new GetSupplierByIdQuery {Id = supplierId});
+            return Ok(result.Data);
         }
 
         /// <summary>
@@ -169,11 +178,16 @@ namespace Isitar.DoenerOrder.Api.Controllers.V1
                 Price = createProductViewModel.Price,
             };
             var result = await mediator.Send(command);
-            return result.Success
-                ? (ActionResult<ProductDto>) CreatedAtAction(nameof(GetProduct),
-                    new {supplierId = result.Data.SupplierId, productId = result.Data.Id},
-                    ProductDto.FromCoreProductDto(result.Data))
-                : BadRequest(result.ErrorMessages);
+            if (!result.Success)
+            {
+                return BadRequest(result.ErrorMessages);
+            }
+
+            var resultData = await mediator.Send(new GetProductForSupplierByIdQuery
+                {ProductId = result.Data, SupplierId = supplierId});
+            return CreatedAtAction(nameof(GetProduct),
+                new {supplierId = supplierId, productId = result.Data},
+                ProductDto.FromCoreProductDto(resultData.Data));
         }
 
         [HttpPut(ApiRoutes.Suppliers.UpdateProduct)]
@@ -190,9 +204,15 @@ namespace Isitar.DoenerOrder.Api.Controllers.V1
                 Price = updateProductViewModel.Price,
             };
             var result = await mediator.Send(command);
-            return result.Success
-                ? (ActionResult<ProductDto>) Ok(ProductDto.FromCoreProductDto(result.Data))
-                : BadRequest(result.ErrorMessages);
+            if (!result.Success)
+            {
+                return BadRequest(result.ErrorMessages);
+            }
+
+            var resultData = await mediator.Send(new GetProductForSupplierByIdQuery
+                {ProductId = result.Data, SupplierId = supplierId});
+
+            return Ok(ProductDto.FromCoreProductDto(resultData.Data));
         }
 
         #endregion
