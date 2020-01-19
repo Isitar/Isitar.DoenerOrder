@@ -165,6 +165,13 @@ namespace Isitar.DoenerOrder.Core.Tests.Supplier
             var queryProduct2Result = await queryOneHandler.Handle(queryProduct2, CancellationToken.None);
             Assert.False(queryProduct2Result.Success);
             
+            var queryProduct1 = new GetProductForSupplierByIdQuery{ ProductId =  productId1, SupplierId = supplierId};
+            var queryProduct3 = new GetProductForSupplierByIdQuery{ ProductId =  productId3, SupplierId = supplierId};
+            var queryProduct1Result = await queryOneHandler.Handle(queryProduct1, CancellationToken.None);
+            Assert.True(queryProduct1Result.Success);
+            var queryProduct3Result = await queryOneHandler.Handle(queryProduct3, CancellationToken.None);
+            Assert.True(queryProduct3Result.Success);
+            
             var result2  = await deleteProductHandler.Handle(deleteProduct2Cmd, CancellationToken.None);
             Assert.False(result2.Success);
         }

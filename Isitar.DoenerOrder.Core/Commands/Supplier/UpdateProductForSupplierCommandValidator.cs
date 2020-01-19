@@ -6,11 +6,9 @@ namespace Isitar.DoenerOrder.Core.Commands.Supplier
 {
     public class UpdateProductForSupplierCommandValidator : AbstractValidator<UpdateProductForSupplierCommand>
     {
-        private DoenerOrderContext dbContext;
 
         public UpdateProductForSupplierCommandValidator(DoenerOrderContext dbContext)
         {
-            this.dbContext = dbContext;
             RuleFor(x => x.SupplierId)
                 .NotEmpty()
                 .Must(supplierId => dbContext.Suppliers.Any(s => s.Id == supplierId))

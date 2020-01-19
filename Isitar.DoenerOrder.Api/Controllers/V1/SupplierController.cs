@@ -106,7 +106,7 @@ namespace Isitar.DoenerOrder.Api.Controllers.V1
             }
 
             var resultData = await mediator.Send(new GetSupplierByIdQuery {Id = supplierId});
-            return Ok(result.Data);
+            return Ok(resultData.Data);
         }
 
         /// <summary>

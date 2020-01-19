@@ -11,10 +11,10 @@ namespace Isitar.DoenerOrder.Core.Data.EntityConfigurations
             builder.HasKey(x => x.Id);
             builder.HasOne(x => x.Product)
                 .WithMany()
-                .IsRequired(true);
+                .IsRequired();
             builder.HasOne(x => x.User)
                 .WithMany()
-                .IsRequired(true);
+                .IsRequired();
             builder.HasMany(x => x.OrderLines)
                 .WithOne(x => x.Order);
         }
