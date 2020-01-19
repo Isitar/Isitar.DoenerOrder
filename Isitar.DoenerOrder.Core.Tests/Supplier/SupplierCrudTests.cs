@@ -17,7 +17,6 @@ namespace Isitar.DoenerOrder.Core.Tests.Supplier
         [Fact]
         public async Task TestCreateSuccess()
         {
-
             var cmd = new CreateSupplierCommand
             {
                 Email = "somemail@gmail.com",
@@ -49,7 +48,6 @@ namespace Isitar.DoenerOrder.Core.Tests.Supplier
             Assert.True(queryAllResponse.Success);
             Assert.NotEmpty(queryAllResponse.Data);
             Assert.Contains(queryAllResponse.Data, s => s.Id.Equals(cmdResponse.Data.Id));
-
         }
 
         [Fact]
@@ -89,7 +87,6 @@ namespace Isitar.DoenerOrder.Core.Tests.Supplier
             Assert.Contains(resultMissingName.Errors, e => e.PropertyName == nameof(cmdMissingName.Name));
             Assert.DoesNotContain(resultMissingName.Errors, e => e.PropertyName == nameof(cmdMissingName.Email));
             Assert.DoesNotContain(resultMissingName.Errors, e => e.PropertyName == nameof(cmdMissingName.Phone));
-
         }
 
         [Theory]
@@ -109,7 +106,7 @@ namespace Isitar.DoenerOrder.Core.Tests.Supplier
                 Phone = "+41 79 456 45 45",
                 Email = email,
             };
-            
+
             var createSupplierCommandValidator = new CreateSupplierCommandValidator();
             var result = await createSupplierCommandValidator.ValidateAsync(createSupplierCommand);
             Assert.False(result.IsValid);
@@ -117,7 +114,7 @@ namespace Isitar.DoenerOrder.Core.Tests.Supplier
             Assert.Contains(result.Errors, e => e.PropertyName == nameof(createSupplierCommand.Email));
             Assert.DoesNotContain(result.Errors, e => e.PropertyName == nameof(createSupplierCommand.Name));
             Assert.DoesNotContain(result.Errors, e => e.PropertyName == nameof(createSupplierCommand.Phone));
-            
+
             var updateSupplierCommand = new UpdateSupplierCommand
             {
                 Id = 1,
@@ -136,7 +133,7 @@ namespace Isitar.DoenerOrder.Core.Tests.Supplier
         }
 
 
-    [Fact]
+        [Fact]
         public async Task TestUpdateSupplierSuccess()
         {
             await using var context = DatabaseHelper.CreateInMemoryDatabaseContext(nameof(TestUpdateSupplierSuccess));
@@ -151,10 +148,11 @@ namespace Isitar.DoenerOrder.Core.Tests.Supplier
             var createSupplierHandler = new CreateSupplierCommandHandler(context);
             var supplierResponse = await createSupplierHandler.Handle(createSupplierCommand, CancellationToken.None);
             Assert.True(supplierResponse.Success);
+            var supplier1Id = supplierResponse.Data.Id;
 
             var updateCmd1 = new UpdateSupplierCommand
             {
-                Id = supplierResponse.Data.Id,
+                Id = supplier1Id,
                 Name = "something",
                 Email = "something@gmail.com",
                 Phone = null,
@@ -164,24 +162,69 @@ namespace Isitar.DoenerOrder.Core.Tests.Supplier
             var queryOneHandler = new GetSupplierByIdQueryHandler(context);
             var response1 = await updateHandler.Handle(updateCmd1, CancellationToken.None);
             Assert.True(response1.Success);
-            var updatedSupplier = (await queryOneHandler.Handle(new GetSupplierByIdQuery {Id = updateCmd1.Id}, CancellationToken.None)).Data;
+            var updatedSupplier =
+                (await queryOneHandler.Handle(new GetSupplierByIdQuery {Id = updateCmd1.Id}, CancellationToken.None))
+                .Data;
             Assert.Equal(updateCmd1.Name, updatedSupplier.Name);
             Assert.Equal(updateCmd1.Email, updatedSupplier.Email);
             Assert.Equal(updateCmd1.Phone, updatedSupplier.Phone);
             var updateCmd2 = new UpdateSupplierCommand
             {
-                Id = supplierResponse.Data.Id,
+                Id = supplier1Id,
                 Name = "something new",
                 Email = "validMail@mail.ch",
                 Phone = "+41 79 456 45 45",
             };
-            
+
             var response2 = await updateHandler.Handle(updateCmd2, CancellationToken.None);
             Assert.True(response2.Success);
-            var updatedAgain = (await queryOneHandler.Handle(new GetSupplierByIdQuery {Id = updateCmd1.Id}, CancellationToken.None)).Data;
+            var updatedAgain =
+                (await queryOneHandler.Handle(new GetSupplierByIdQuery {Id = updateCmd1.Id}, CancellationToken.None))
+                .Data;
             Assert.Equal(updateCmd2.Name, updatedAgain.Name);
             Assert.Equal(updateCmd2.Email, updatedAgain.Email);
             Assert.Equal(updateCmd2.Phone, updatedAgain.Phone);
+            
+            var updateNonExistingSupplierCommand = new UpdateSupplierCommand
+            {
+                Id = supplier1Id + 1,
+                Name = "something",
+                Email = "sali@valid.ch",
+                Phone = "+41 79 456 45 45",
+            };
+            var response3 = await updateHandler.Handle(updateNonExistingSupplierCommand, CancellationToken.None);
+            Assert.False(response3.Success);
+        }
+
+        [Fact]
+        public async Task DeleteSupplier()
+        {
+            await using var context = DatabaseHelper.CreateInMemoryDatabaseContext(nameof(DeleteSupplier));
+            var validSupplierCmd = ValidModelCreator.CreateSupplierCommand();
+            var createSupplierHandler = new CreateSupplierCommandHandler(context);
+            var createResult1 = await createSupplierHandler.Handle(validSupplierCmd, CancellationToken.None);
+            Assert.True(createResult1.Success);
+            var createResult2 = await createSupplierHandler.Handle(validSupplierCmd, CancellationToken.None);
+            Assert.True(createResult2.Success);
+            var createResult3 = await createSupplierHandler.Handle(validSupplierCmd, CancellationToken.None);
+            Assert.True(createResult3.Success);
+
+
+            var deleteSupplier2Cmd = new DeleteSupplierCommand
+            {
+                Id = createResult2.Data.Id,
+            };
+            var deleteHandler = new DeleteSupplierCommandHandler(context);
+            var deleteResult1 = await deleteHandler.Handle(deleteSupplier2Cmd, CancellationToken.None);
+            Assert.True(deleteResult1.Success);
+            var querySupplier2 = new GetSupplierByIdQuery {Id = createResult2.Data.Id};
+            var queryOneHandler = new GetSupplierByIdQueryHandler(context);
+            var querySupplier2Res = await queryOneHandler.Handle(querySupplier2, CancellationToken.None);
+            Assert.False(querySupplier2Res.Success);
+
+            var deleteResult2 = await deleteHandler.Handle(deleteSupplier2Cmd, CancellationToken.None);
+            Assert.False(deleteResult2.Success);
+
         }
     }
 }

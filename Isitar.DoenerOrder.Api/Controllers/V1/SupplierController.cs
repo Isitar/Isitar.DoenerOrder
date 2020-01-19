@@ -101,6 +101,21 @@ namespace Isitar.DoenerOrder.Api.Controllers.V1
                 : BadRequest(result.ErrorMessages);
         }
 
+        /// <summary>
+        /// Deletes a supplier
+        /// </summary>
+        /// <param name="supplierId">the id of the supplier to delete</param>
+        /// <returns>true if delete worked, BadRequest otherwise</returns>
+        [HttpDelete(ApiRoutes.Suppliers.Delete)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<bool>> Delete(int supplierId)
+        {
+            var command = new DeleteSupplierCommand {Id = supplierId};
+            var result = await mediator.Send(command);
+            return result.Success ? (ActionResult<bool>) Ok(result.Success) : BadRequest(result.ErrorMessages);
+        }
+
         #endregion
 
         #region supplier/:id/product
@@ -179,6 +194,7 @@ namespace Isitar.DoenerOrder.Api.Controllers.V1
                 ? (ActionResult<ProductDto>) Ok(ProductDto.FromCoreProductDto(result.Data))
                 : BadRequest(result.ErrorMessages);
         }
+
         #endregion
     }
 }

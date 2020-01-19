@@ -124,6 +124,8 @@
             <e p="CreateProductForSupplierCommandValidator.cs" t="Include" />
             <e p="CreateSupplierCommand.cs" t="Include" />
             <e p="CreateSupplierCommandValidator.cs" t="Include" />
+            <e p="DeleteSupplierCommand.cs" t="Include" />
+            <e p="DeleteSupplierCommandValidator.cs" t="Include" />
             <e p="UpdateProductForSupplierCommand.cs" t="Include" />
             <e p="UpdateProductForSupplierCommandValidator.cs" t="Include" />
             <e p="UpdateSupplierCommand.cs" t="Include" />
@@ -165,6 +167,7 @@
             <e p="CommandHandlers" t="Include">
               <e p="CreateProductForSupplierCommandHandler.cs" t="Include" />
               <e p="CreateSupplierCommandHandler.cs" t="Include" />
+              <e p="DeleteSupplierCommandHandler.cs" t="Include" />
               <e p="UpdateProductForSupplierCommandHandler.cs" t="Include" />
               <e p="UpdateSupplierCommandHandler.cs" t="Include" />
             </e>
@@ -186,6 +189,7 @@
           </e>
         </e>
         <e p="Responses" t="Include">
+          <e p="BooleanResponse.cs" t="Include" />
           <e p="Product" t="Include">
             <e p="ProductDto.cs" t="Include" />
             <e p="ProductResponse.cs" t="Include" />
