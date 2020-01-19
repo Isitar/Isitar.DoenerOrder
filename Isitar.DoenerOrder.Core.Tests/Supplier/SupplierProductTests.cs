@@ -140,5 +140,34 @@ namespace Isitar.DoenerOrder.Core.Tests.Supplier
             Assert.Equal("another thing", queryResponse3.Data.Label);
             Assert.Equal(66.45798m, queryResponse3.Data.Price);
         }
+
+        [Fact]
+        public async Task DeleteProductForSupplier()
+        {
+            var context = DatabaseHelper.CreateInMemoryDatabaseContext(nameof(DeleteProductForSupplier));
+            var createSupplierCmd = ValidModelCreator.CreateSupplierCommand();
+            var createHandler = new CreateSupplierCommandHandler(context);
+            var supplierId = createHandler.Handle(createSupplierCmd, CancellationToken.None).Result.Data;
+            
+            var createProductCmd = ValidModelCreator.CreateProductForSupplierCommand(supplierId);
+            var createProductHandler = new CreateProductForSupplierCommandHandler(context);
+            var productId1 = createProductHandler.Handle(createProductCmd, CancellationToken.None).Result.Data;
+            var productId2 = createProductHandler.Handle(createProductCmd, CancellationToken.None).Result.Data;
+            var productId3 = createProductHandler.Handle(createProductCmd, CancellationToken.None).Result.Data;
+
+            var deleteProduct2Cmd = new DeleteProductForSupplierCommand
+                {ProductId = productId2, SupplierId = supplierId};
+            var deleteProductHandler = new DeleteProductForSupplierCommandHandler(context);
+            var result  = await deleteProductHandler.Handle(deleteProduct2Cmd, CancellationToken.None);
+            Assert.True(result.Success);
+
+            var queryProduct2 = new GetProductForSupplierByIdQuery {ProductId = productId2, SupplierId = supplierId};
+            var queryOneHandler = new GetProductForSupplierByIdQueryHandler(context);
+            var queryProduct2Result = await queryOneHandler.Handle(queryProduct2, CancellationToken.None);
+            Assert.False(queryProduct2Result.Success);
+            
+            var result2  = await deleteProductHandler.Handle(deleteProduct2Cmd, CancellationToken.None);
+            Assert.False(result2.Success);
+        }
     }
 }
