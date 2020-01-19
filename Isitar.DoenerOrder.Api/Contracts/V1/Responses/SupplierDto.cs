@@ -1,5 +1,3 @@
-using Isitar.DoenerOrder.Core.Data.DAO;
-
 namespace Isitar.DoenerOrder.Api.Contracts.V1.Responses
 
 {

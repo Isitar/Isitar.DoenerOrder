@@ -1,7 +1,6 @@
 using System.Linq;
 using FluentValidation;
 using Isitar.DoenerOrder.Core.Data;
-using Microsoft.EntityFrameworkCore;
 
 namespace Isitar.DoenerOrder.Core.Commands.Supplier
 {

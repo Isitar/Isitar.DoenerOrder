@@ -2,7 +2,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Isitar.DoenerOrder.Core.Commands.Supplier;
-using Isitar.DoenerOrder.Core.Handlers.Supplier;
 using Isitar.DoenerOrder.Core.Handlers.Supplier.CommandHandlers;
 using Isitar.DoenerOrder.Core.Handlers.Supplier.QueryHandlers;
 using Isitar.DoenerOrder.Core.Queries.Supplier;

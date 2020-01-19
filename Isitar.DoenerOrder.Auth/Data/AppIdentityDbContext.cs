@@ -1,6 +1,5 @@
 using Isitar.DoenerOrder.Auth.Data.DAO;
 using Isitar.DoenerOrder.Auth.Data.EntityConfigurations;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

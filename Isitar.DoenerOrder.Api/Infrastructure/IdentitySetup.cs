@@ -1,6 +1,5 @@
 using Isitar.DoenerOrder.Auth.Data;
 using Isitar.DoenerOrder.Auth.Data.DAO;
-using Isitar.DoenerOrder.Core.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 

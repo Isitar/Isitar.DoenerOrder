@@ -1,5 +1,4 @@
 using Isitar.DoenerOrder.Core.Responses;
-using Isitar.DoenerOrder.Core.Responses.Supplier;
 using MediatR;
 
 namespace Isitar.DoenerOrder.Core.Commands.Supplier
