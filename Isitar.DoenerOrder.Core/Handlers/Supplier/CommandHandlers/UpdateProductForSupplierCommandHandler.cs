@@ -22,14 +22,14 @@ namespace Isitar.DoenerOrder.Core.Handlers.Supplier.CommandHandlers
             CancellationToken cancellationToken)
         {
             var product = await dbContext.Products.FindAsync(request.ProductId);
-            if (null == product)
+            if (null == product || product.SupplierId != request.SupplierId)
             {
                 return new ProductResponse
                 {
                     Success = false,
                     ErrorMessages = new Dictionary<string, IList<string>>
                     {
-                        {nameof(request.ProductId), new[] {"No product found"}};
+                        {nameof(request.ProductId), new[] {"No product found"}},
                     }
                 };
             }

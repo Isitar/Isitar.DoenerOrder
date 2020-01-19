@@ -167,7 +167,17 @@ namespace Isitar.DoenerOrder.Api.Controllers.V1
         public async Task<ActionResult<ProductDto>> UpdateProduct(int supplierId, int productId,
             [FromBody] UpdateProductViewModel updateProductViewModel)
         {
-            var command = new UpdateProduct
+            var command = new UpdateProductForSupplierCommand
+            {
+                SupplierId = supplierId,
+                ProductId = productId,
+                Label = updateProductViewModel.Label,
+                Price = updateProductViewModel.Price,
+            };
+            var result = await mediator.Send(command);
+            return result.Success
+                ? (ActionResult<ProductDto>) Ok(ProductDto.FromCoreProductDto(result.Data))
+                : BadRequest(result.ErrorMessages);
         }
         #endregion
     }
