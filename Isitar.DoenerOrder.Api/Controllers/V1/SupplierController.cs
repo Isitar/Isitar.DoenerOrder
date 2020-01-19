@@ -165,7 +165,7 @@ namespace Isitar.DoenerOrder.Api.Controllers.V1
                 : BadRequest(result.ErrorMessages);
         }
 
-        [HttpPost(ApiRoutes.Suppliers.AddProduct)]
+        [HttpPost(ApiRoutes.Suppliers.CreateProduct)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<ActionResult<ProductDto>> AddProduct(int supplierId,
