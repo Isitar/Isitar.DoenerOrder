@@ -1,9 +1,12 @@
+using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Isitar.DoenerOrder.Core.Commands.Supplier;
 using Isitar.DoenerOrder.Core.Handlers.Supplier.CommandHandlers;
 using Isitar.DoenerOrder.Core.Handlers.Supplier.QueryHandlers;
 using Isitar.DoenerOrder.Core.Queries.Supplier;
+using Microsoft.EntityFrameworkCore;
 using Xunit;
 
 namespace Isitar.DoenerOrder.Core.Tests.Supplier
@@ -130,17 +133,8 @@ namespace Isitar.DoenerOrder.Core.Tests.Supplier
         {
             await using var context = DatabaseHelper.CreateInMemoryDatabaseContext(nameof(TestUpdateSupplierSuccess));
 
-
-            var createSupplierCommand = new CreateSupplierCommand
-            {
-                Name = "Supplier 123",
-                Email = "supplier@gmail.com",
-                Phone = "+41 79 456 45 45",
-            };
-            var createSupplierHandler = new CreateSupplierCommandHandler(context);
-            var supplierResponse = await createSupplierHandler.Handle(createSupplierCommand, CancellationToken.None);
-            Assert.True(supplierResponse.Success);
-            var supplier1Id = supplierResponse.Data;
+            var addedSupplier = await context.Suppliers.AddAsync(ValidModelCreator.Supplier());
+            var supplier1Id = addedSupplier.Entity.Id;
 
             var updateCmd1 = new UpdateSupplierCommand
             {
@@ -176,7 +170,7 @@ namespace Isitar.DoenerOrder.Core.Tests.Supplier
             Assert.Equal(updateCmd2.Name, updatedAgain.Name);
             Assert.Equal(updateCmd2.Email, updatedAgain.Email);
             Assert.Equal(updateCmd2.Phone, updatedAgain.Phone);
-            
+
             var updateNonExistingSupplierCommand = new UpdateSupplierCommand
             {
                 Id = supplier1Id + 1,
@@ -192,31 +186,36 @@ namespace Isitar.DoenerOrder.Core.Tests.Supplier
         public async Task DeleteSupplier()
         {
             await using var context = DatabaseHelper.CreateInMemoryDatabaseContext(nameof(DeleteSupplier));
-            var validSupplierCmd = ValidModelCreator.CreateSupplierCommand();
-            var createSupplierHandler = new CreateSupplierCommandHandler(context);
-            var createResult1 = await createSupplierHandler.Handle(validSupplierCmd, CancellationToken.None);
-            Assert.True(createResult1.Success);
-            var createResult2 = await createSupplierHandler.Handle(validSupplierCmd, CancellationToken.None);
-            Assert.True(createResult2.Success);
-            var createResult3 = await createSupplierHandler.Handle(validSupplierCmd, CancellationToken.None);
-            Assert.True(createResult3.Success);
+            var supplierId1Task= context.AddAsync(ValidModelCreator.Supplier());
+            var supplierId2Task = context.AddAsync(ValidModelCreator.Supplier());
+            var supplierId3Task  = context.AddAsync(ValidModelCreator.Supplier());
 
-
+            var supplier1Id = (await supplierId1Task).Entity.Id;
+            var supplier2Id = (await supplierId2Task).Entity.Id;
+            var supplier3Id = (await supplierId3Task).Entity.Id;
             var deleteSupplier2Cmd = new DeleteSupplierCommand
             {
-                Id = createResult2.Data,
+                Id = supplier2Id,
             };
             var deleteHandler = new DeleteSupplierCommandHandler(context);
             var deleteResult1 = await deleteHandler.Handle(deleteSupplier2Cmd, CancellationToken.None);
             Assert.True(deleteResult1.Success);
-            var querySupplier2 = new GetSupplierByIdQuery {Id = createResult2.Data};
+            var querySupplier2 = new GetSupplierByIdQuery {Id = supplier2Id};
             var queryOneHandler = new GetSupplierByIdQueryHandler(context);
             var querySupplier2Res = await queryOneHandler.Handle(querySupplier2, CancellationToken.None);
             Assert.False(querySupplier2Res.Success);
 
             var deleteResult2 = await deleteHandler.Handle(deleteSupplier2Cmd, CancellationToken.None);
             Assert.False(deleteResult2.Success);
-
+            
+            var querySupplier1 = new GetSupplierByIdQuery {Id = supplier1Id};
+            var query1Result = await queryOneHandler.Handle(querySupplier1, CancellationToken.None);
+            Assert.True(query1Result.Success);
+            var querySupplier3 = new GetSupplierByIdQuery {Id = supplier3Id};
+            var query3Result = await queryOneHandler.Handle(querySupplier3, CancellationToken.None);
+            Assert.True(query3Result.Success);
+            
+            
         }
     }
 }

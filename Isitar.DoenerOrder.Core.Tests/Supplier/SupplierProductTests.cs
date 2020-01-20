@@ -15,11 +15,8 @@ namespace Isitar.DoenerOrder.Core.Tests.Supplier
         public async Task CreateProductForSupplier()
         {
             await using var context = DatabaseHelper.CreateInMemoryDatabaseContext(nameof(CreateProductForSupplier));
-            var createSupplierCommand = ValidModelCreator.CreateSupplierCommand();
-            var createSupplierHandler = new CreateSupplierCommandHandler(context);
-            var supplierResponse = await createSupplierHandler.Handle(createSupplierCommand, CancellationToken.None);
-            Assert.True(supplierResponse.Success);
-            var supplierId = supplierResponse.Data;
+            var res = await context.AddAsync(ValidModelCreator.Supplier());
+            var supplierId = res.Entity.Id;
 
             var createProductForSupplierCommand = new CreateProductForSupplierCommand
             {
@@ -59,17 +56,10 @@ namespace Isitar.DoenerOrder.Core.Tests.Supplier
         public async Task UpdateProductForSupplier()
         {
             await using var context = DatabaseHelper.CreateInMemoryDatabaseContext(nameof(UpdateProductForSupplier));
-            var createSupplierCommand = ValidModelCreator.CreateSupplierCommand();
-            var createSupplierHandler = new CreateSupplierCommandHandler(context);
-            var supplierResponse = await createSupplierHandler.Handle(createSupplierCommand, CancellationToken.None);
-            Assert.True(supplierResponse.Success);
-            var supplierId = supplierResponse.Data;
-            var createProductForSupplierCommand = ValidModelCreator.CreateProductForSupplierCommand(supplierId);
-            var createProductForSupplierHandler = new CreateProductForSupplierCommandHandler(context);
-            var createProductResponse =
-                await createProductForSupplierHandler.Handle(createProductForSupplierCommand, CancellationToken.None);
-            Assert.True(createProductResponse.Success);
-            var productId = createProductResponse.Data;
+            var supplierRes = await context.AddAsync(ValidModelCreator.Supplier());
+            var supplierId = supplierRes.Entity.Id;
+            var productRes = await context.AddAsync(ValidModelCreator.Product(supplierId));
+            var productId = productRes.Entity.Id;
             
             //test update
             var updateProductCmd1 = new UpdateProductForSupplierCommand
@@ -144,15 +134,12 @@ namespace Isitar.DoenerOrder.Core.Tests.Supplier
         public async Task DeleteProductForSupplier()
         {
             var context = DatabaseHelper.CreateInMemoryDatabaseContext(nameof(DeleteProductForSupplier));
-            var createSupplierCmd = ValidModelCreator.CreateSupplierCommand();
-            var createHandler = new CreateSupplierCommandHandler(context);
-            var supplierId = createHandler.Handle(createSupplierCmd, CancellationToken.None).Result.Data;
+            var supplierResp = await context.AddAsync(ValidModelCreator.Supplier());
+            var supplierId = supplierResp.Entity.Id;
             
-            var createProductCmd = ValidModelCreator.CreateProductForSupplierCommand(supplierId);
-            var createProductHandler = new CreateProductForSupplierCommandHandler(context);
-            var productId1 = createProductHandler.Handle(createProductCmd, CancellationToken.None).Result.Data;
-            var productId2 = createProductHandler.Handle(createProductCmd, CancellationToken.None).Result.Data;
-            var productId3 = createProductHandler.Handle(createProductCmd, CancellationToken.None).Result.Data;
+            var productId1 = (await context.AddAsync(ValidModelCreator.Product(supplierId))).Entity.Id;
+            var productId2 = (await context.AddAsync(ValidModelCreator.Product(supplierId))).Entity.Id;
+            var productId3 = (await context.AddAsync(ValidModelCreator.Product(supplierId))).Entity.Id;
 
             var deleteProduct2Cmd = new DeleteProductForSupplierCommand
                 {ProductId = productId2, SupplierId = supplierId};
